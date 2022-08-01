@@ -1,8 +1,8 @@
 import {Model, Web3Connection, Web3ConnectionOptions, Deployable, XEvents} from '@taikai/dappkit';
 
 import SablierJson from 'artifacts/contracts/Sablier.sol/Sablier.json';
-import { SablierMethods } from './src/interfaces/sablier';
-import * as Events from './src/events/sablier'
+import { SablierMethods } from 'src/interfaces/sablier';
+import * as Events from 'src/events/sablier'
 import {PastEventOptions} from 'web3-eth-contract';
 import {AbiItem} from 'web3-utils';
 
@@ -10,7 +10,14 @@ export class Sablier extends Model<SablierMethods> implements Deployable {
   constructor(web3Connection: Web3Connection|Web3ConnectionOptions, contractAddress?: string) {
     super(web3Connection, SablierJson.abi as AbiItem[], contractAddress);
   }
+  async deployJsonAbi() {
+    const deployOptions = {
+        data: SablierJson.bytecode,
+        arguments: []
+    };
 
+    return this.deploy(deployOptions, this.connection.Account);
+  }
 
     async balanceOf(streamId: number, who: string) { 
     return this.callTx(this.contract.methods.balanceOf(streamId, who));
@@ -41,12 +48,15 @@ export class Sablier extends Model<SablierMethods> implements Deployable {
   }
 
   async getCancelStreamEvents(filter: PastEventOptions): Promise<XEvents<Events.CancelStreamEvent>[]> {
-    return this.contract.self.getPastEvents(CancelStream, filter);
+    return this.contract.self.getPastEvents('CancelStream', filter);
   }
+
   async getCreateStreamEvents(filter: PastEventOptions): Promise<XEvents<Events.CreateStreamEvent>[]> {
-    return this.contract.self.getPastEvents(CreateStream, filter);
+    return this.contract.self.getPastEvents('CreateStream', filter);
   }
+
   async getWithdrawFromStreamEvents(filter: PastEventOptions): Promise<XEvents<Events.WithdrawFromStreamEvent>[]> {
-    return this.contract.self.getPastEvents(WithdrawFromStream, filter);
+    return this.contract.self.getPastEvents('WithdrawFromStream', filter);
   }
+
 }

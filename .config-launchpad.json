@@ -1,7 +1,7 @@
 {
   "paths": {                            
-    "base": "@base",                    
-    "abi": "@abi",                      
+    "base": "@taikai/dappkit/dist/src/base",                    
+    "abi": "@taikai/dappkit/dist/build/contracts",                      
     "interfaces": "@interfaces",        
     "methods": "@methods",              
     "events": "@events"                 
@@ -16,6 +16,6 @@
     "class": true,
     "events": true
   },
-  "asPackage": false,
+  "asPackage": true,
   "templatesDir": "./node_modules/@taikai/dappkit-launchpad/src/templates/" 
 }

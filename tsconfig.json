@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2016",
     "module": "commonjs",
-    "baseUrl": "./src/",
+    "baseUrl": "./",
     "rootDir": "./",
     "resolveJsonModule": true,
     "declaration": true,
@@ -23,8 +23,11 @@
   },
   "exclude": [
     "scripts",
+    "sdk",
     "node_modules",
+    "dist",
     "frontend",
-    "hardhat.config.ts"
+    "hardhat.config.ts",
+    "typechain-types",  
   ],
 }
