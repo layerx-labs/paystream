@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const contract_call_method_1 = require("@methods/contract-call-method");
+ > ;
+cancelStream(streamId, number);
+ContractSendMethod;
+createStream(recipient, string, deposit, number, tokenAddress, string, startTime, number, stopTime, number);
+ContractSendMethod;
+deltaOf(streamId, number);
+contract_call_method_1.ContractCallMethod < 'delta';
+number;
+ > ;
+getStream(streamId, number);
+contract_call_method_1.ContractCallMethod;
+nextStreamId();
+contract_call_method_1.ContractCallMethod;
+withdrawFromStream(streamId, number, amount, number);
+ContractSendMethod;
