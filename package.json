@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@openzeppelin/contracts": "2.3.0",
     "@taikai/dappkit": "2.0.7",
     "hardhat": "^2.10.1"
   },
