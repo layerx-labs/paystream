@@ -1,13 +1,23 @@
-# Sample Hardhat Project
+# Paysteam Smart Contracts SDK 
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+This is an SDK generated with dappkit-launchpad. The SDK generated could be used to deploy and interact with the 
+paystream contracts.
 
-Try running some of the following tasks:
+## Compile Contracts
 
-```shell
-npx hardhat help
-npx hardhat test
-GAS_REPORT=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
+```
+npm run compile
+```
+
+
+## Generate the SDK 
+
+```
+npm run build 
+```
+
+## Packing the SDK
+
+```
+npm run build && npm pack
 ```

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "compile": "npx hardhat compile",
-    "pre-build": "npx dlt -j .config-launchpad.json -f build/contracts/Sablier.sol/Sablier.json",
+    "pre-build": "npx dlt -j .config-launchpad.json -f build/contracts/protocol/Sablier.sol/Sablier.json",
     "prepublishOnly": "npm run build",
     "build": "npx tsc",
     "lint": "npm run eslint -- --quiet",
@@ -19,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@openzeppelin/contracts": "2.3.0",
+    "@openzeppelin/contracts": "3.4.2",
     "@taikai/dappkit": "2.0.7",
     "hardhat": "^2.10.1"
   },
