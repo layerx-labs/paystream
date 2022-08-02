@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "compile": "npx hardhat compile",
-    "pre-build": "npx dlt -j .config-launchpad.json -f build/contracts/protocol/Sablier.sol/Sablier.json",
+    "prebuild": "npx dlt -j .config-launchpad.json -f build/contracts/protocol/Sablier.sol/Sablier.json",
     "prepublishOnly": "npm run build",
     "build": "npx tsc",
     "lint": "npm run eslint -- --quiet",
@@ -31,7 +31,7 @@
     "@nomicfoundation/hardhat-toolbox": "^1.0.2",
     "@nomiclabs/hardhat-ethers": "^2.1.0",
     "@nomiclabs/hardhat-etherscan": "^3.1.0",
-    "@taikai/dappkit-launchpad": "0.0.12",
+    "@taikai/dappkit-launchpad": "0.0.13",
     "@typechain/ethers-v5": "^10.1.0",
     "@typechain/hardhat": "^6.1.2",
     "@types/chai": "^4.3.1",
