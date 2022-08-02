@@ -10,7 +10,15 @@
     "build": "npx tsc",
     "lint": "npm run eslint -- --quiet",
     "lint-fix": "npm run eslint -- --quiet --fix",
-    "eslint": "eslint --ignore-path .eslintignore --ext .ts ./src"
+    "eslint": "eslint --ignore-path .eslintignore --ext .ts ./src",
+    "deploy:local": "npx hardhat run --network hardhat scripts/deploy.ts",
+    "deploy:kovan": "npx hardhat run --network kovan scripts/deploy.ts",
+    "deploy:ropsten": "npx hardhat run --network ropsten scripts/deploy.ts",
+    "deploy:moonbase": "npx hardhat run --network moonbase scripts/deploy.ts",
+    "deploy:seneca": "npx hardhat run --network seneca scripts/deploy.ts",
+    "deploy:afrodite": "npx hardhat run --network afrodite scripts/deploy.ts",
+    "deploy:irene": "npx hardhat run --network irene scripts/deploy.ts",
+    "deploy:iris": "npx hardhat run --network iris scripts/deploy.ts"
   },
   "repository": {
     "type": "git",
@@ -21,6 +29,7 @@
   "dependencies": {
     "@openzeppelin/contracts": "3.4.2",
     "@taikai/dappkit": "2.0.7",
+    "dotenv": "^16.0.1",
     "hardhat": "^2.10.1"
   },
   "devDependencies": {

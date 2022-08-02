@@ -9,7 +9,6 @@ paystream contracts.
 npm run compile
 ```
 
-
 ## Generate the SDK 
 
 ```
@@ -20,4 +19,12 @@ npm run build
 
 ```
 npm run build && npm pack
+```
+
+## Deploy the Contracts
+
+
+```
+# network = hardhat| kovan | iris ...
+npx hardhat run --network <network> scripts/deploy.ts
 ```
