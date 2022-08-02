@@ -1,6 +1,6 @@
 import {Model, Web3Connection, Web3ConnectionOptions, Deployable, XEvents} from '@taikai/dappkit';
 
-import SablierJson from 'artifacts/contracts/Sablier.sol/Sablier.json';
+import SablierJson from 'build/contracts/Sablier.sol/Sablier.json';
 import { SablierMethods } from 'src/interfaces/sablier';
 import * as Events from 'src/events/sablier'
 import {PastEventOptions} from 'web3-eth-contract';
@@ -10,12 +10,14 @@ export class Sablier extends Model<SablierMethods> implements Deployable {
   constructor(web3Connection: Web3Connection|Web3ConnectionOptions, contractAddress?: string) {
     super(web3Connection, SablierJson.abi as AbiItem[], contractAddress);
   }
+
   async deployJsonAbi() {
     const deployOptions = {
-        data: SablierJson.bytecode,
-        arguments: []
-    };
-
+      data: SablierJson.bytecode,
+      arguments: [
+        
+      ]
+    }
     return this.deploy(deployOptions, this.connection.Account);
   }
 

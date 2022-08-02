@@ -1,0 +1,46 @@
+.eslintrc {
+  "parser": "@typescript-eslint/parser",
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "rules": {
+
+    "indent-legacy": ["error", 2, {
+      "FunctionDeclaration": {
+        "parameters": "first"
+      },
+      "ObjectExpression": "first",
+      "ArrayExpression": "first",
+      "CallExpression": {
+        "arguments": "first"
+      }
+    }],
+    "no-prototype-builtins": 0,
+    "no-return-await": 2,
+    "camelcase": 0,
+    "no-underscore-dangle": 0,
+    "class-methods-use-this": 1,
+    "no-unused-vars": 1,
+    "complexity": ["error", 4],
+    "max-len": [
+      "error",
+      {
+        "code": 120,
+        "ignoreComments": true
+      }
+    ],
+    "no-console": ["error", {"allow": ["error", "log"]}],
+    "no-undef": 1,
+    "eqeqeq": 1,
+    "function-paren-newline": [
+      "error",
+      "never"
+    ],
+    "function-call-argument-newline": [
+      "error",
+      "consistent"
+    ]
+  },
+  "env": {
+    "browser": true,
+    "es2021": true
+  }
+}

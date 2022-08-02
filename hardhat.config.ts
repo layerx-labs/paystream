@@ -10,7 +10,10 @@ const config: HardhatUserConfig = {
         runs: 1000,
       },
     },
-  } 
+  },
+  paths: {
+    artifacts: "./build"
+  }
 };
 
 export default config;

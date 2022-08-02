@@ -7,9 +7,9 @@
     "events": "@events"                 
   },
   "output": {                           
-    "interfaceDir": "./src/interfaces",
-    "classDir": "./src/classes",
-    "eventsDir": "./src/events"
+    "interfaceDir": "src/interfaces",
+    "classDir": "src/classes",
+    "eventsDir": "src/events"
   },
   "overwrite": {                        
     "interface": true,
