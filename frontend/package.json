@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "ganache:dev": "ganache -h 0.0.0.0 -p 8545 -a 50  -s 0x6d2119524d65ea0b15b214ef260d3acdf8ca0ec6ec68045b5785d970f5ad97bd3d0025d212e625a8a21920852cc165c10faa6d8387a0c2530d1ffc0d265d92935749"
   },
   "engines": {
     "node": "16.16.0"
@@ -16,11 +17,15 @@
   },
   "dependencies": {
     "@prisma/client": "^4.1.1",
+    "@taikai/dappkit": "2.0.7",
     "@taikai/rocket-kit": "^2.0.1",
+    "dotenv": "^16.0.1",
     "next": "12.2.3",
+    "paystream-sdk": "file:../sdk",
     "prisma": "^4.1.1",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "styled-components": "^5.3.5"
   },
   "devDependencies": {
     "@types/node": "18.6.3",
