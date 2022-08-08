@@ -6,7 +6,8 @@ import { useContext } from "react";
 import { WebConnectionCtx } from "../context";
 import { Web3Connection } from "@taikai/dappkit";
 import { useBalance } from "../hooks/useBalance";
-import {Account} from 'web3-core';
+import { useAddress } from "../hooks/useAddress";
+import { useERC20Balance } from "../hooks/useERC20Balance";
 import { useWeb3 } from "../hooks/useWeb3";
 import { ChainId } from "../constants/networks";
 
@@ -14,13 +15,19 @@ const Home: NextPage = () => {
  
   const web3Con: Web3Connection = useContext(WebConnectionCtx);
   const {connected, connecting, connect , error, disconnect }  = useWeb3(web3Con, 
-    ChainId.SENECA, { 
+    ChainId.IRENE, { 
       autonnect: false ,
       switchNetwork: true,
       addNewortk: true,
     }
   );
   const { balance } = useBalance(web3Con, connected);
+  const { address } = useAddress(web3Con, connected);
+  const { balance: beproBalance } = useERC20Balance(
+    web3Con, 
+    "0x37ebdd9B2adC5f8af3993256859c1Ea3BFE1465e", 
+    address
+  );
   
   return (
     <div className={styles.container}>
@@ -50,9 +57,20 @@ const Home: NextPage = () => {
         </GridRow>
         {connected && (
           <GridRow>
+            <GridCol>{address}</GridCol>
+          </GridRow>
+        )}
+        {connected && (
+          <GridRow>
             <GridCol>{balance} ETH</GridCol>
           </GridRow>
         )}
+         {connected && (
+          <GridRow>
+            <GridCol>{beproBalance} BEPRO</GridCol>
+          </GridRow>
+        )}
+         
         {connected && (
           <GridRow>
             <GridCol>
