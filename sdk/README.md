@@ -1,4 +1,4 @@
-# Paysteam Smart Contracts SDK 
+# Paystream Smart Contracts SDK 
 
 This is an SDK generated with dappkit-launchpad. The SDK generated could be used to deploy and interact with the 
 paystream contracts.
