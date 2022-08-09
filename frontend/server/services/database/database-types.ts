@@ -8,32 +8,108 @@ export interface IOrmError {
   clientVersion?: string;
 }
 
+export interface ISelectionSetProps {
+  info?: any;
+  gql?: any;
+  select?: Record<string | number, any>;
+}
+
 export interface IOrmAdapterMethodsProps {
+  create: {
+    data: Record<string, any>;
+    info?: Record<string, any>;
+    gql?: any;
+    select?: Record<string, any>;
+  };
+  createMany: {
+    data: Record<string, any>;
+    info?: Record<string, any>;
+    gql?: any;
+    select?: Record<string, any>;
+  };
   findMany: {
     where: Record<string, any>;
-    orderBy: Record<string, any>;
+    orderBy?: Record<string, any>;
     page?: number;
     perPage?: number;
-    info?: Record<string, any> | null;
+    info?: Record<string, any>;
     gql?: any;
-    select: Record<string, any>;
+    select?: Record<string, any>;
+  };
+  findManyPageInfo: {
+    where: Record<string, any>;
+    perPage?: number;
+  };
+  find: {
+    where: Record<string, any>;
+    info?: Record<string, any>;
+    gql?: any;
+    select?: Record<string, any>;
+  };
+  update: {
+    data: Record<string, any>;
+    where: Record<string, any>;
+    info?: Record<string, any>;
+    gql?: any;
+    select?: Record<string, any>;
+  };
+  updateMany: {
+    data: Record<string, any>;
+    where: Record<string, any>;
+    info?: Record<string, any>;
+    gql?: any;
+    select?: Record<string, any>;
+  };
+  delete: {
+    where: Record<string, any>;
+    info?: Record<string, any>;
+    gql?: any;
+    select?: Record<string, any>;
+  };
+  deleteMany: {
+    where: Record<string, any>;
+    info?: Record<string, any>;
+    gql?: any;
+    select?: Record<string, any>;
+  };
+  upsert: {
+    where: Record<string, any>;
+    update: Record<string, any>;
+    create: Record<string, any>;
+    info?: Record<string, any>;
+    gql?: any;
+    select?: Record<string, any>;
+  };
+  count: {
+    where?: Record<string, any>;
   };
 }
 
 export interface IOrmAdapter {
-  new (args: OrmAdapterProps): void;
-  findMany(props: IOrmAdapterMethodsProps['findMany']): Promise<any>;
-  findManyPageInfo(): Promise<any>;
-  find(): Promise<any>;
-  count(): Promise<any>;
-  create(): Promise<any>;
-  createMany(): Promise<any>;
-  update(): Promise<any>;
-  deleteMany(): Promise<any>;
-  updateMany(): Promise<any>;
-  upsert(): Promise<any>;
-  aggregate(): Promise<any>;
-  groupBy(): Promise<any>;
+  findMany<E = any>(
+    props: IOrmAdapterMethodsProps['findMany']
+  ): Promise<Array<E>>;
+  findManyPageInfo(
+    props: IOrmAdapterMethodsProps['findManyPageInfo']
+  ): Promise<{
+    perPage: number;
+    recordCount: number;
+    pageCount: number;
+  }>;
+  find<E = any>(props: IOrmAdapterMethodsProps['find']): Promise<E>;
+  count(props: IOrmAdapterMethodsProps['count']): Promise<number>;
+  create<E = any>(props: IOrmAdapterMethodsProps['create']): Promise<E>;
+  createMany(
+    props: IOrmAdapterMethodsProps['createMany']
+  ): Promise<{ count: number }>;
+  update<E = any>(props: IOrmAdapterMethodsProps['update']): Promise<E>;
+  deleteMany(
+    props: IOrmAdapterMethodsProps['deleteMany']
+  ): Promise<{ count: number }>;
+  updateMany(
+    props: IOrmAdapterMethodsProps['updateMany']
+  ): Promise<{ count: number }>;
+  upsert(props: IOrmAdapterMethodsProps['upsert']): Promise<any>;
 }
 
 export type OrmErrorProps = {
@@ -43,11 +119,12 @@ export type OrmErrorProps = {
 
 export type DatabaseManagerProps<T> = {
   orm: T;
-  OrmAdapter: IOrmAdapter;
+  makeOrmAdapter(props: OrmAdapterProps): IOrmAdapter;
   modelsNames: Record<string, string>;
   errorHandler: IErrorHandler;
   infoToSelect: InfoToSelect;
   tagToSelect: TagToSelect;
+  selectParser: SelectParser;
 };
 
 export type OrmAdapterProps = {
@@ -55,11 +132,15 @@ export type OrmAdapterProps = {
   modelName?: string;
   infoToSelect: InfoToSelect;
   tagToSelect: TagToSelect;
+  selectParser: SelectParser;
 };
 
 export interface IErrorHandler {
   errorHandler(args: OrmErrorProps): CustomError;
 }
 
-export type InfoToSelect = (info: any) => Record<string, any>;
-export type TagToSelect = (info: any) => Record<string, any>;
+export type InfoToSelect = (info: any) => Record<string | number, any>;
+export type TagToSelect = (info: any) => Record<string | number, any>;
+export type SelectParser = (
+  select: Record<string | number, any>
+) => Record<string | number, any>;

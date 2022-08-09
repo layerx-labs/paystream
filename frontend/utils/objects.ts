@@ -5,8 +5,8 @@
  * @returns The merged objects
  */
 const merger = (
-  target: Record<string | number, any>,
-  obj: Record<string | number, any>
+  target?: Record<string | number, any> | null,
+  obj?: Record<string | number, any> | null
 ) => {
   if (!target) {
     target = Array.isArray(obj) ? [] : {};
@@ -22,8 +22,13 @@ const merger = (
   return target;
 };
 
-export const objectsMerger = (...objects: Record<string | number, any>[]) =>
-  objects.reduce((acc, cur) => merger(acc, cur));
+export const objectsMerger = (
+  ...objects: (Record<string | number, any> | null | undefined)[]
+) =>
+  objects.reduce((acc, cur) => merger(acc, cur)) as Record<
+    string | number,
+    any
+  >;
 
 export const preventNullValues = (data: Record<string, any>) =>
   Object.entries(data).reduce((result, [curKey, curValue]) => {

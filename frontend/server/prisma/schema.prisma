@@ -11,14 +11,25 @@ datasource db {
 }
 
 model Stream {
-  id              String        @id @default(cuid()) @db.VarChar(30)
-  streamId        Int           @unique
-  sender          String        @db.VarChar(50)
-  recipient       String        @db.VarChar(50)
-  tokenAddress    String        @db.VarChar(50)
-  deposit         Int           
-  startTime       DateTime               
-  stopTime        DateTime         
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  id                  String               @id @default(cuid()) @db.VarChar(30)
+  streamId            Int                  @unique
+  sender              String               @db.VarChar(50)
+  recipient           String               @db.VarChar(50)
+  tokenAddress        String               @db.VarChar(50)
+  deposit             Int
+  startTime           DateTime
+  stopTime            DateTime
+  withdrawsFromStream WithdrawFromStream[]
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+}
+
+model WithdrawFromStream {
+  id        String   @id @default(cuid()) @db.VarChar(30)
+  streamId  String   @db.VarChar(30)
+  stream    Stream   @relation(fields: [streamId], references: [id], onDelete: Cascade)
+  recipient String   @db.VarChar(50)
+  amount    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

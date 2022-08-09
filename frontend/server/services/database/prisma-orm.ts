@@ -208,3 +208,7 @@ export const infoToSelect: InfoToSelect = (info: any) =>
 
 export const tagToSelect: TagToSelect = (gql: any) =>
   new TagToPrismaAdapter(gql).toPrisma();
+
+export const selectParser: TagToSelect = (
+  select: Record<string | number, any>
+) => select;
