@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import DatabaseManager from './database-manager';
+import makeDatabaseManager from './database-manager';
 import makeOrmAdapter from './orm-adapter';
 import {
   ErrorHandler,
@@ -9,7 +9,7 @@ import {
   selectParser,
 } from './prisma-orm';
 
-const c = new DatabaseManager({
+export const db = makeDatabaseManager({
   orm: prismaClient,
   errorHandler: new ErrorHandler(),
   infoToSelect,

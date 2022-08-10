@@ -1,63 +1,47 @@
 import { camelize } from '../../../utils/string';
 import {
   DatabaseManagerProps,
+  IDatabaseManager,
   IErrorHandler,
-  IOrmAdapter,
+  IModelsNames,
 } from './database-types';
 
-class DatabaseManager<T> {
-  private orm: T & IErrorHandler;
-  constructor({
-    orm,
-    makeOrmAdapter,
-    modelsNames,
-    errorHandler,
-    infoToSelect,
-    tagToSelect,
-    selectParser,
-  }: DatabaseManagerProps<T>) {
-    this.orm = { ...orm, ...errorHandler };
-
-    for (const key in modelsNames) {
+function makeDatabaseManager<T>({
+  orm,
+  makeOrmAdapter,
+  modelsNames,
+  errorHandler,
+  infoToSelect,
+  tagToSelect,
+  selectParser,
+}: DatabaseManagerProps<T>) {
+  const databaseManager = Object.keys(modelsNames).reduce(
+    (acc, key) => {
       if (Object.hasOwnProperty.call(modelsNames, key)) {
-        const modelCamel = camelize(modelsNames[key]);
-        (this as any)[modelCamel] = makeOrmAdapter({
-          delegate: orm[modelCamel as keyof T],
-          infoToSelect,
-          tagToSelect,
-          selectParser,
-        });
+        const modelCamel = camelize(
+          modelsNames[key as keyof typeof modelsNames]
+        );
+        return {
+          ...acc,
+          [modelCamel as keyof IModelsNames<typeof modelsNames>]:
+            makeOrmAdapter({
+              delegate: orm[modelCamel as keyof T],
+              infoToSelect,
+              tagToSelect,
+              selectParser,
+            }),
+        };
       }
+      return acc;
+    },
+    {
+      _orm: { ...orm, ...errorHandler },
     }
-  }
+  ) as IDatabaseManager<typeof modelsNames> & {
+    _orm: T & IErrorHandler;
+  };
+
+  return databaseManager;
 }
 
-// function makeDatabaseManager<T>({
-//   orm,
-//   makeOrmAdapter,
-//   modelsNames,
-//   errorHandler,
-//   infoToSelect,
-//   tagToSelect,
-//   selectParser,
-// }: DatabaseManagerProps<T>) {
-//   const databaseManager : Record<`${keyof modelsNames}`, any> =  {
-//     // _orm: { ...orm, ...errorHandler },
-//   };
-
-//   for (const key in modelsNames) {
-//     if (Object.hasOwnProperty.call(modelsNames, key)) {
-//       const modelCamel = camelize(modelsNames[key]);
-//       databaseManager[modelCamel] = makeOrmAdapter({
-//         delegate: orm[modelCamel as keyof T],
-//         infoToSelect,
-//         tagToSelect,
-//         selectParser,
-//       });
-//     }
-//   }
-
-//   return databaseManager;
-// }
-
-export default DatabaseManager;
+export default makeDatabaseManager;

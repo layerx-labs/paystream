@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import CustomError from '../errors/custom-error';
 
 export interface IOrmError {
@@ -8,108 +9,105 @@ export interface IOrmError {
   clientVersion?: string;
 }
 
-export interface ISelectionSetProps {
-  info?: any;
-  gql?: any;
-  select?: Record<string | number, any>;
-}
+type Select = {
+  select: Record<string, boolean | Select>;
+};
 
-export interface IOrmAdapterMethodsProps {
+export type ISelectionSetProps = {
+  info?: Record<string, any>;
+  gql?: any;
+} & Partial<Select>;
+
+export interface IOrmAdapterMethodsProps<
+  WhereInput = any,
+  CreateInput = any,
+  UpdateInput = any
+> {
   create: {
-    data: Record<string, any>;
-    info?: Record<string, any>;
-    gql?: any;
-    select?: Record<string, any>;
-  };
+    data: CreateInput;
+  } & ISelectionSetProps;
   createMany: {
-    data: Record<string, any>;
-    info?: Record<string, any>;
-    gql?: any;
-    select?: Record<string, any>;
-  };
+    data: CreateInput | ReadonlyArray<CreateInput>;
+  } & ISelectionSetProps;
   findMany: {
-    where: Record<string, any>;
+    where: WhereInput;
     orderBy?: Record<string, any>;
     page?: number;
     perPage?: number;
-    info?: Record<string, any>;
-    gql?: any;
-    select?: Record<string, any>;
-  };
+  } & ISelectionSetProps;
   findManyPageInfo: {
-    where: Record<string, any>;
+    where: WhereInput;
     perPage?: number;
   };
   find: {
-    where: Record<string, any>;
-    info?: Record<string, any>;
-    gql?: any;
-    select?: Record<string, any>;
-  };
+    where: WhereInput;
+  } & ISelectionSetProps;
   update: {
-    data: Record<string, any>;
-    where: Record<string, any>;
-    info?: Record<string, any>;
-    gql?: any;
-    select?: Record<string, any>;
-  };
+    data: UpdateInput;
+    where: WhereInput;
+  } & ISelectionSetProps;
   updateMany: {
-    data: Record<string, any>;
-    where: Record<string, any>;
-    info?: Record<string, any>;
-    gql?: any;
-    select?: Record<string, any>;
-  };
+    data: UpdateInput;
+    where: WhereInput;
+  } & ISelectionSetProps;
   delete: {
-    where: Record<string, any>;
-    info?: Record<string, any>;
-    gql?: any;
-    select?: Record<string, any>;
-  };
+    where: WhereInput;
+  } & ISelectionSetProps;
   deleteMany: {
-    where: Record<string, any>;
-    info?: Record<string, any>;
-    gql?: any;
-    select?: Record<string, any>;
-  };
+    where: WhereInput;
+  } & ISelectionSetProps;
   upsert: {
-    where: Record<string, any>;
-    update: Record<string, any>;
-    create: Record<string, any>;
-    info?: Record<string, any>;
-    gql?: any;
-    select?: Record<string, any>;
-  };
+    where: WhereInput;
+    update: UpdateInput;
+    create: CreateInput;
+  } & ISelectionSetProps;
   count: {
-    where?: Record<string, any>;
+    where?: WhereInput;
   };
 }
 
 export interface IOrmAdapter {
-  findMany<E = any>(
-    props: IOrmAdapterMethodsProps['findMany']
-  ): Promise<Array<E>>;
-  findManyPageInfo(
-    props: IOrmAdapterMethodsProps['findManyPageInfo']
+  findMany<WhereInput = any, Entity = any>(
+    props: IOrmAdapterMethodsProps<WhereInput, any, any>['findMany']
+  ): Promise<Array<Entity>>;
+  findManyPageInfo<WhereInput = any>(
+    props: IOrmAdapterMethodsProps<WhereInput, any, any>['findManyPageInfo']
   ): Promise<{
     perPage: number;
     recordCount: number;
     pageCount: number;
   }>;
-  find<E = any>(props: IOrmAdapterMethodsProps['find']): Promise<E>;
-  count(props: IOrmAdapterMethodsProps['count']): Promise<number>;
-  create<E = any>(props: IOrmAdapterMethodsProps['create']): Promise<E>;
-  createMany(
-    props: IOrmAdapterMethodsProps['createMany']
+  find<WhereInput = any, Entity = any>(
+    props: IOrmAdapterMethodsProps<WhereInput, any, any>['find']
+  ): Promise<Entity>;
+  count<WhereInput = any>(
+    props: IOrmAdapterMethodsProps<WhereInput, any, any>['count']
+  ): Promise<number>;
+  create<CreateInput = any, Entity = any>(
+    props: IOrmAdapterMethodsProps<any, CreateInput, any>['create']
+  ): Promise<Entity>;
+  createMany<CreateInput = any>(
+    props: IOrmAdapterMethodsProps<any, CreateInput, any>['createMany']
   ): Promise<{ count: number }>;
-  update<E = any>(props: IOrmAdapterMethodsProps['update']): Promise<E>;
-  deleteMany(
-    props: IOrmAdapterMethodsProps['deleteMany']
+  update<WhereInput = any, UpdateInput = any, Entity = any>(
+    props: IOrmAdapterMethodsProps<WhereInput, any, UpdateInput>['update']
+  ): Promise<Entity>;
+  deleteMany<WhereInput = any>(
+    props: IOrmAdapterMethodsProps<WhereInput, any, any>['deleteMany']
   ): Promise<{ count: number }>;
-  updateMany(
-    props: IOrmAdapterMethodsProps['updateMany']
+  delete<WhereInput = any, Entity = any>(
+    props: IOrmAdapterMethodsProps<WhereInput, any, any>['delete']
+  ): Promise<Entity>;
+  updateMany<WhereInput = any, UpdateInput = any>(
+    props: IOrmAdapterMethodsProps<WhereInput, any, UpdateInput>['updateMany']
   ): Promise<{ count: number }>;
-  upsert(props: IOrmAdapterMethodsProps['upsert']): Promise<any>;
+  upsert<WhereInput = any, CreateInput = any, UpdateInput = any, Entity = any>(
+    props: IOrmAdapterMethodsProps<
+      WhereInput,
+      CreateInput,
+      UpdateInput
+    >['upsert']
+  ): Promise<Entity>;
 }
 
 export type OrmErrorProps = {
@@ -120,7 +118,7 @@ export type OrmErrorProps = {
 export type DatabaseManagerProps<T> = {
   orm: T;
   makeOrmAdapter(props: OrmAdapterProps): IOrmAdapter;
-  modelsNames: Record<string, string>;
+  modelsNames: typeof Prisma.ModelName;
   errorHandler: IErrorHandler;
   infoToSelect: InfoToSelect;
   tagToSelect: TagToSelect;
@@ -144,3 +142,28 @@ export type TagToSelect = (info: any) => Record<string | number, any>;
 export type SelectParser = (
   select: Record<string | number, any>
 ) => Record<string | number, any>;
+
+type HeadLetter<T> = T extends `${infer FirstLetter}${infer _Rest}`
+  ? FirstLetter
+  : never;
+type TailLetters<T> = T extends `${infer _FirstLetter}${infer Rest}`
+  ? Rest
+  : never;
+
+type CamelCase<S extends string> = `${Lowercase<
+  HeadLetter<S>
+>}${TailLetters<S>}`;
+
+export type KeysToCamelCase<T> = {
+  [K in keyof T as CamelCase<string & K>]: T[K] extends {}
+    ? KeysToCamelCase<T[K]>
+    : T[K];
+};
+
+export type IModelsNames<T> = KeysToCamelCase<T>;
+
+type IMapModelNames<T> = {
+  [Property in keyof T]: IOrmAdapter;
+};
+
+export type IDatabaseManager<T> = IMapModelNames<IModelsNames<T>>;
