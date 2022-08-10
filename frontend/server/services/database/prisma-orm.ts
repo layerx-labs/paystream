@@ -206,8 +206,8 @@ class TagToPrismaAdapter {
 export const infoToSelect: InfoToSelect = (info: any) =>
   new PrismaSelect(info).value;
 
-export const tagToSelect: TagToSelect = (gql: any) =>
-  new TagToPrismaAdapter(gql).toPrisma();
+export const tagToSelect: TagToSelect = (gqlTag: any) =>
+  new TagToPrismaAdapter(gqlTag).toPrisma();
 
 export const selectParser: TagToSelect = (
   select: Record<string | number, any>

@@ -1,5 +1,12 @@
 import { Prisma } from '@prisma/client';
 import CustomError from '../errors/custom-error';
+import {
+  GeneratedCreateInputs,
+  GeneratedUpdateInputs,
+  GeneratedWhereInputs,
+  GeneratedSelects,
+  GeneratedEntities,
+} from './entity-inputs';
 
 export interface IOrmError {
   code: string;
@@ -9,103 +16,161 @@ export interface IOrmError {
   clientVersion?: string;
 }
 
-type Select = {
-  select: Record<string, boolean | Select>;
+type Select<T = any> = {
+  select: T;
 };
 
-export type ISelectionSetProps = {
+export type ISelectionSetProps<S = any> = {
   info?: Record<string, any>;
   gql?: any;
-} & Partial<Select>;
+} & Partial<Select<S>>;
 
 export interface IOrmAdapterMethodsProps<
   WhereInput = any,
   CreateInput = any,
-  UpdateInput = any
+  UpdateInput = any,
+  Select = any
 > {
   create: {
     data: CreateInput;
-  } & ISelectionSetProps;
+  } & ISelectionSetProps<Select>;
   createMany: {
     data: CreateInput | ReadonlyArray<CreateInput>;
-  } & ISelectionSetProps;
+  } & ISelectionSetProps<Select>;
   findMany: {
     where: WhereInput;
     orderBy?: Record<string, any>;
     page?: number;
     perPage?: number;
-  } & ISelectionSetProps;
+  } & ISelectionSetProps<Select>;
   findManyPageInfo: {
     where: WhereInput;
     perPage?: number;
   };
   find: {
     where: WhereInput;
-  } & ISelectionSetProps;
+  } & ISelectionSetProps<Select>;
   update: {
     data: UpdateInput;
     where: WhereInput;
-  } & ISelectionSetProps;
+  } & ISelectionSetProps<Select>;
   updateMany: {
     data: UpdateInput;
     where: WhereInput;
-  } & ISelectionSetProps;
+  } & ISelectionSetProps<Select>;
   delete: {
     where: WhereInput;
-  } & ISelectionSetProps;
+  } & ISelectionSetProps<Select>;
   deleteMany: {
     where: WhereInput;
-  } & ISelectionSetProps;
+  } & ISelectionSetProps<Select>;
   upsert: {
     where: WhereInput;
     update: UpdateInput;
     create: CreateInput;
-  } & ISelectionSetProps;
+  } & ISelectionSetProps<Select>;
   count: {
     where?: WhereInput;
   };
 }
 
-export interface IOrmAdapter {
-  findMany<WhereInput = any, Entity = any>(
-    props: IOrmAdapterMethodsProps<WhereInput, any, any>['findMany']
+export interface IOrmAdapter<
+  WhereInput = any,
+  CreateInput = any,
+  UpdateInput = any,
+  Select = any,
+  Entity = any
+> {
+  findMany(
+    props: IOrmAdapterMethodsProps<
+      WhereInput,
+      CreateInput,
+      UpdateInput,
+      Select
+    >['findMany']
   ): Promise<Array<Entity>>;
-  findManyPageInfo<WhereInput = any>(
-    props: IOrmAdapterMethodsProps<WhereInput, any, any>['findManyPageInfo']
+  findManyPageInfo(
+    props: IOrmAdapterMethodsProps<
+      WhereInput,
+      CreateInput,
+      UpdateInput,
+      Select
+    >['findManyPageInfo']
   ): Promise<{
     perPage: number;
     recordCount: number;
     pageCount: number;
   }>;
-  find<WhereInput = any, Entity = any>(
-    props: IOrmAdapterMethodsProps<WhereInput, any, any>['find']
-  ): Promise<Entity>;
-  count<WhereInput = any>(
-    props: IOrmAdapterMethodsProps<WhereInput, any, any>['count']
-  ): Promise<number>;
-  create<CreateInput = any, Entity = any>(
-    props: IOrmAdapterMethodsProps<any, CreateInput, any>['create']
-  ): Promise<Entity>;
-  createMany<CreateInput = any>(
-    props: IOrmAdapterMethodsProps<any, CreateInput, any>['createMany']
-  ): Promise<{ count: number }>;
-  update<WhereInput = any, UpdateInput = any, Entity = any>(
-    props: IOrmAdapterMethodsProps<WhereInput, any, UpdateInput>['update']
-  ): Promise<Entity>;
-  deleteMany<WhereInput = any>(
-    props: IOrmAdapterMethodsProps<WhereInput, any, any>['deleteMany']
-  ): Promise<{ count: number }>;
-  delete<WhereInput = any, Entity = any>(
-    props: IOrmAdapterMethodsProps<WhereInput, any, any>['delete']
-  ): Promise<Entity>;
-  updateMany<WhereInput = any, UpdateInput = any>(
-    props: IOrmAdapterMethodsProps<WhereInput, any, UpdateInput>['updateMany']
-  ): Promise<{ count: number }>;
-  upsert<WhereInput = any, CreateInput = any, UpdateInput = any, Entity = any>(
+  find(
     props: IOrmAdapterMethodsProps<
       WhereInput,
       CreateInput,
-      UpdateInput
+      UpdateInput,
+      Select
+    >['find']
+  ): Promise<Entity>;
+  count(
+    props: IOrmAdapterMethodsProps<
+      WhereInput,
+      CreateInput,
+      UpdateInput,
+      Select
+    >['count']
+  ): Promise<number>;
+  create(
+    props: IOrmAdapterMethodsProps<
+      WhereInput,
+      CreateInput,
+      UpdateInput,
+      Select
+    >['create']
+  ): Promise<Entity>;
+  createMany(
+    props: IOrmAdapterMethodsProps<
+      WhereInput,
+      CreateInput,
+      UpdateInput,
+      Select
+    >['createMany']
+  ): Promise<{ count: number }>;
+  update(
+    props: IOrmAdapterMethodsProps<
+      WhereInput,
+      CreateInput,
+      UpdateInput,
+      Select
+    >['update']
+  ): Promise<Entity>;
+  deleteMany(
+    props: IOrmAdapterMethodsProps<
+      WhereInput,
+      CreateInput,
+      UpdateInput,
+      Select
+    >['deleteMany']
+  ): Promise<{ count: number }>;
+  delete(
+    props: IOrmAdapterMethodsProps<
+      WhereInput,
+      CreateInput,
+      UpdateInput,
+      Select
+    >['delete']
+  ): Promise<Entity>;
+  updateMany(
+    props: IOrmAdapterMethodsProps<
+      WhereInput,
+      CreateInput,
+      UpdateInput,
+      Select
+    >['updateMany']
+  ): Promise<{ count: number }>;
+  upsert(
+    props: IOrmAdapterMethodsProps<
+      WhereInput,
+      CreateInput,
+      UpdateInput,
+      Select
     >['upsert']
   ): Promise<Entity>;
 }
@@ -138,7 +203,7 @@ export interface IErrorHandler {
 }
 
 export type InfoToSelect = (info: any) => Record<string | number, any>;
-export type TagToSelect = (info: any) => Record<string | number, any>;
+export type TagToSelect = (gqlTag: any) => Record<string | number, any>;
 export type SelectParser = (
   select: Record<string | number, any>
 ) => Record<string | number, any>;
@@ -163,7 +228,21 @@ export type KeysToCamelCase<T> = {
 export type IModelsNames<T> = KeysToCamelCase<T>;
 
 type IMapModelNames<T> = {
-  [Property in keyof T]: IOrmAdapter;
+  [Property in keyof T]: IOrmAdapter<
+    Property extends keyof GeneratedWhereInputs
+      ? GeneratedWhereInputs[Property]
+      : any,
+    Property extends keyof GeneratedCreateInputs
+      ? GeneratedCreateInputs[Property]
+      : any,
+    Property extends keyof GeneratedUpdateInputs
+      ? GeneratedUpdateInputs[Property]
+      : any,
+    Property extends keyof GeneratedSelects ? GeneratedSelects[Property] : any,
+    Property extends keyof GeneratedEntities
+      ? GeneratedEntities[Property] & { [key: string]: any }
+      : any
+  >;
 };
 
 export type IDatabaseManager<T> = IMapModelNames<IModelsNames<T>>;
