@@ -12,26 +12,36 @@ import { useWeb3 } from "../hooks/useWeb3";
 import { ChainId } from "../constants/networks";
 import { dappConfig } from "../config";
 
-const Home: NextPage = () => {
- 
-  const web3Con: Web3Connection = useContext(WebConnectionCtx);
-  const {connected, connecting, connect , error, disconnect }  = useWeb3(web3Con, 
-    dappConfig.chainId as ChainId, { 
-      autonnect: false ,
-      switchNetwork: true,
-      addNewortk: true,
-      disconnectOnSwitchAccount: true,
-      disconnectOnChangeNetwork: true, 
-    }
-  );
-  const { balance } = useBalance(web3Con, connected);
-  const { address } = useAddress(web3Con, connected);
+
+interface ShowWalletDetailsProps  {
+  connection: Web3Connection;
+}
+
+const ShowWalletDetails = ( props: ShowWalletDetailsProps)=> {
+  const { balance } = useBalance(props.connection);
+  const { address } = useAddress(props.connection);
   const { balance: beproBalance } = useERC20Balance(
-    web3Con, 
+    props.connection, 
     dappConfig.beproContracAddress, 
     address
   );
-  
+  return <>
+      <GridRow>
+        <GridCol>{address}</GridCol>
+      </GridRow>
+      <GridRow>
+        <GridCol>{balance} ETH</GridCol>
+      </GridRow>
+      <GridRow>
+        <GridCol>{beproBalance} BEPRO</GridCol>
+      </GridRow>
+    </>
+};
+
+const Home: NextPage = () => { 
+  const web3Con: Web3Connection = useContext(WebConnectionCtx);
+  const {connected, connecting, connect , error, disconnect }  = useWeb3(web3Con);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -58,22 +68,7 @@ const Home: NextPage = () => {
             )}
           </GridCol>
         </GridRow>
-        {connected && (
-          <GridRow>
-            <GridCol>{address}</GridCol>
-          </GridRow>
-        )}
-        {connected && (
-          <GridRow>
-            <GridCol>{balance} ETH</GridCol>
-          </GridRow>
-        )}
-         {connected && (
-          <GridRow>
-            <GridCol>{beproBalance} BEPRO</GridCol>
-          </GridRow>
-        )}
-         
+        {connected && <ShowWalletDetails connection={web3Con} />}         
         {connected && (
           <GridRow>
             <GridCol>

@@ -1,13 +1,13 @@
 import { Web3Connection } from "@taikai/dappkit";
 import { useEffect, useState } from "react";
 
-export const useAddress = (con: Web3Connection, isConnected: boolean) => {
+export const useAddress = (con: Web3Connection) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [address, setAddress] = useState("");
 
   useEffect(() => {
-    if (!con || !con.started || !isConnected) {
+    if (!con || !con.started ) {
       setLoading(false);
       setAddress("");
       return;
@@ -18,7 +18,7 @@ export const useAddress = (con: Web3Connection, isConnected: boolean) => {
         setAddress(address)
       })
       .catch(e=> setError(e.message));
-  }, [isConnected]);
+  }, [con]);
 
   return { error, loading, address };
 };
