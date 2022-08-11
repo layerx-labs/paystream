@@ -9,19 +9,15 @@ import { useBalance } from "../hooks/useBalance";
 import { useAddress } from "../hooks/useAddress";
 import { useERC20Balance } from "../hooks/useERC20Balance";
 import { useWeb3 } from "../hooks/useWeb3";
-import { ChainId } from "../constants/networks";
 import { dappConfig } from "../config";
 
 
-interface ShowWalletDetailsProps  {
-  connection: Web3Connection;
-}
-
-const ShowWalletDetails = ( props: ShowWalletDetailsProps)=> {
-  const { balance } = useBalance(props.connection);
-  const { address } = useAddress(props.connection);
+const ShowWalletDetails = ()=> {
+  const web3Con: Web3Connection = useContext(WebConnectionCtx);
+  const { balance } = useBalance(web3Con);
+  const { address } = useAddress(web3Con);
   const { balance: beproBalance } = useERC20Balance(
-    props.connection, 
+    web3Con, 
     dappConfig.beproContracAddress, 
     address
   );
@@ -68,7 +64,7 @@ const Home: NextPage = () => {
             )}
           </GridCol>
         </GridRow>
-        {connected && <ShowWalletDetails connection={web3Con} />}         
+        {connected && <ShowWalletDetails />}         
         {connected && (
           <GridRow>
             <GridCol>
