@@ -10,6 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum StreamStatus {
+  CANCELED
+  ACTIVE
+}
+
 model Stream {
   id                  String               @id @default(cuid()) @db.VarChar(30)
   streamId            Int                  @unique
@@ -20,6 +25,7 @@ model Stream {
   startTime           DateTime
   stopTime            DateTime
   withdrawsFromStream WithdrawFromStream[]
+  status              StreamStatus         @default(ACTIVE)
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
 }
@@ -27,7 +33,7 @@ model Stream {
 model WithdrawFromStream {
   id        String   @id @default(cuid()) @db.VarChar(30)
   streamId  String   @db.VarChar(30)
-  stream    Stream   @relation(fields: [streamId], references: [id], onDelete: Cascade)
+  stream    Stream   @relation(fields: [streamId], references: [id], onDelete: Restrict)
   recipient String   @db.VarChar(50)
   amount    Int
   createdAt DateTime @default(now())

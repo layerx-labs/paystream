@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "StreamStatus" AS ENUM ('CANCELED', 'ACTIVE');
+
 -- CreateTable
 CREATE TABLE "Stream" (
     "id" VARCHAR(30) NOT NULL,
@@ -8,6 +11,7 @@ CREATE TABLE "Stream" (
     "deposit" INTEGER NOT NULL,
     "startTime" TIMESTAMP(3) NOT NULL,
     "stopTime" TIMESTAMP(3) NOT NULL,
+    "status" "StreamStatus" NOT NULL DEFAULT 'ACTIVE',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -30,4 +34,4 @@ CREATE TABLE "WithdrawFromStream" (
 CREATE UNIQUE INDEX "Stream_streamId_key" ON "Stream"("streamId");
 
 -- AddForeignKey
-ALTER TABLE "WithdrawFromStream" ADD CONSTRAINT "WithdrawFromStream_streamId_fkey" FOREIGN KEY ("streamId") REFERENCES "Stream"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "WithdrawFromStream" ADD CONSTRAINT "WithdrawFromStream_streamId_fkey" FOREIGN KEY ("streamId") REFERENCES "Stream"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
