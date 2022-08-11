@@ -10,22 +10,25 @@ import { useAddress } from "../hooks/useAddress";
 import { useERC20Balance } from "../hooks/useERC20Balance";
 import { useWeb3 } from "../hooks/useWeb3";
 import { ChainId } from "../constants/networks";
+import { dappConfig } from "../config";
 
 const Home: NextPage = () => {
  
   const web3Con: Web3Connection = useContext(WebConnectionCtx);
   const {connected, connecting, connect , error, disconnect }  = useWeb3(web3Con, 
-    ChainId.IRENE, { 
+    dappConfig.chainId as ChainId, { 
       autonnect: false ,
       switchNetwork: true,
       addNewortk: true,
+      disconnectOnSwitchAccount: true,
+      disconnectOnChangeNetwork: true, 
     }
   );
   const { balance } = useBalance(web3Con, connected);
   const { address } = useAddress(web3Con, connected);
   const { balance: beproBalance } = useERC20Balance(
     web3Con, 
-    "0x37ebdd9B2adC5f8af3993256859c1Ea3BFE1465e", 
+    dappConfig.beproContracAddress, 
     address
   );
   

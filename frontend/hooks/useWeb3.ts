@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback} from "react";
 import { Web3Connection } from "@taikai/dappkit";
 import { chainDict } from "../constants/networks";
+import {Errors} from '@taikai/dappkit/dist/src/interfaces/error-enum';
 
 interface WebHookOptions {
   autonnect: boolean, 
   switchNetwork?: boolean,
-  addNewortk?: boolean
+  addNewortk?: boolean,
+  disconnectOnSwitchAccount?: boolean,
+  disconnectOnChangeNetwork?: boolean,
 }
 
 export const useWeb3 = (
@@ -16,8 +19,44 @@ export const useWeb3 = (
   {
   const [connected, setConnected] = useState(false);
   const [connecting, setConnecting] = useState(false);
+  const [address, setAddress] = useState("");
   const [error, setError] = useState("");
 
+  const onAccountsChanged = (prevAddress: string) => (newAddresses: string[]) => {
+    const newAddress =
+      newAddresses && newAddresses.length > 0 ? newAddresses[0] : "";
+    if (options.disconnectOnSwitchAccount && prevAddress && newAddress && newAddress != prevAddress) {
+      disconnect();
+    }    
+  };
+
+  const onChainChanged = (prevChain: number) => (newChainId: string) => {
+    if (options.disconnectOnChangeNetwork && newChainId && connection.utils.numberToHex(prevChain) !== newChainId) { 
+      disconnect();
+    } 
+  };
+
+  const onConnectionReady = async ()=> {
+    if(!connected) {      
+      const address = await connection.getAddress();
+      setConnected(true);
+      setError("");      
+      setAddress(address);
+      (window as any).ethereum.on('accountsChanged', onAccountsChanged(address));    
+      (window as any).ethereum.on('chainChanged', onChainChanged(chainId));
+    }
+  };
+
+  const disconnect = ()=> {
+    (window as any).ethereum.on('accountsChanged', ()=> {});    
+    (window as any).ethereum.on('chainChanged', ()=> {});
+    console.log("false");
+    setAddress("");
+    setConnected(false);
+    setError("");        
+  };
+
+  
   const addNetwork = async () => {
     try {
       setConnecting(true);
@@ -31,12 +70,11 @@ export const useWeb3 = (
           },
         ],
       });
-      const networkID = await connection.eth.getChainId();
-      if (chainId !== networkID) { 
-        setError(`Connected to the wrong Chain Id ${networkID} `);
+      const connectedChainId = await connection.eth.getChainId();
+      if (chainId !== connectedChainId) { 
+        setError(`Connected to the wrong Chain Id ${connectedChainId} `);
       } else {
-        setConnected(true);
-        setError("");
+        onConnectionReady();
       }
     } catch (addError: any) {
       setError(`Failed to Add Supported chain ${chainId} - ${addError.message}`);
@@ -48,21 +86,18 @@ export const useWeb3 = (
   const switchChain = async () => {
     try {
       setConnecting(true);      
-      console.log(`Switching to ${chainId} network`);
       await (window as any).ethereum.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: connection.utils.numberToHex(chainId)}],
       });      
-      const networkID = await connection.eth.getChainId();   
-      if (chainId !== networkID) { 
-        setError(`Connected to the wrong Chain Id ${networkID} `);
+      const connectedChainId = await connection.eth.getChainId();   
+      if (chainId !== connectedChainId) { 
+        setError(`Connected to the wrong Chain Id ${connectedChainId} `);
       } else {
-        setConnected(true);
-        setError("");
+        onConnectionReady();
       }
     } catch (switchError: any) {
       if (switchError.code === 4902) {
-        console.log("Adding new chain");
         if (options.addNewortk) {
           addNetwork();
         }
@@ -81,16 +116,16 @@ export const useWeb3 = (
       // 1. Tries to connect 
       const res = await connection.connect();
       // 2. Verify if you are connected to right network p.ex based on Network Id
-      const networkID = await connection.eth.getChainId();
-      if (chainId !== networkID) {       
+      const connectedChainID = await connection.eth.getChainId();
+      if (chainId !== connectedChainID) {       
         // 3. Tries to force the change network
         if(options.switchNetwork) {
           switchChain();
         } else {
-          setError(`You are connected to the wrong chain ${networkID}`);
+          setError(`You are connected to the wrong chain ${connectedChainID}`);
         }        
       } else {
-        setConnected(res);
+        onConnectionReady();
       }      
     } catch (e: any) {
       setError(e.message);
@@ -98,7 +133,7 @@ export const useWeb3 = (
       setConnecting(false);
     }    
   };
-
+ 
   useEffect(() => {
     if (options.autonnect) {
       startConnection();
@@ -108,13 +143,7 @@ export const useWeb3 = (
   const connect = () => {
     startConnection();
   };
-
-  const disconnect = () => {
-    if (connected) {
-      setConnected(false);
-      setError("");
-    }
-  };
+ 
   return { connected, connecting, connection, connect, disconnect, error };
 };
 
