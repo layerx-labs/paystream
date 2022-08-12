@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum StreamStatus {
+  CANCELED
+  ACTIVE
+}
+
+model Stream {
+  id                  String               @id @default(cuid()) @db.VarChar(30)
+  streamId            Int                  @unique
+  sender              String               @db.VarChar(50)
+  recipient           String               @db.VarChar(50)
+  tokenAddress        String               @db.VarChar(50)
+  deposit             Int
+  startTime           DateTime
+  stopTime            DateTime
+  withdrawsFromStream WithdrawFromStream[]
+  status              StreamStatus         @default(ACTIVE)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+}
+
+model WithdrawFromStream {
+  id        String   @id @default(cuid()) @db.VarChar(30)
+  streamId  String   @db.VarChar(30)
+  stream    Stream   @relation(fields: [streamId], references: [id], onDelete: Restrict)
+  recipient String   @db.VarChar(50)
+  amount    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
