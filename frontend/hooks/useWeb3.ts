@@ -1,8 +1,13 @@
 import { useEffect, useState, useCallback} from "react";
 import { Web3Connection } from "@taikai/dappkit";
 import { chainDict } from "../constants/networks";
-import {Errors} from '@taikai/dappkit/dist/src/interfaces/error-enum';
 import { dappConfig } from "../config";
+
+import  useAddress  from "./useAddress"; 
+import  useChainId  from "./useChainId"; 
+
+
+
 
 export const useWeb3 = (
   connection: Web3Connection
@@ -10,7 +15,8 @@ export const useWeb3 = (
   {
   const [connected, setConnected] = useState(connection.started);
   const [connecting, setConnecting] = useState(false);
-  const [address, setAddress] = useState(connection.Account ? connection.Account.address: "");
+  const address = useAddress(connection);
+  const chainId = useChainId(connection);
   const [error, setError] = useState("");
 
   const onAccountsChanged = (prevAddress: string )=>(newAddresses: string[]) => {
@@ -32,7 +38,6 @@ export const useWeb3 = (
       const retrievedAdress = await connection.getAddress();
       setConnected(true);
       setError("");      
-      setAddress(retrievedAdress);
       (window as any).ethereum.on('accountsChanged', onAccountsChanged(retrievedAdress));    
       (window as any).ethereum.on('chainChanged', onChainChanged(dappConfig.chainId));
     }
@@ -42,7 +47,6 @@ export const useWeb3 = (
     (window as any).ethereum.on('accountsChanged', ()=> {});    
     (window as any).ethereum.on('chainChanged', ()=> {});
     console.log("false");
-    setAddress("");
     setConnected(false);
     setError("");        
   };
@@ -126,7 +130,7 @@ export const useWeb3 = (
   };
  
   useEffect(() => {
-    if (dappConfig.autonnect) {
+    if (dappConfig.autonnect ) {
       startConnection();
     }
   }, []);
@@ -135,6 +139,6 @@ export const useWeb3 = (
     startConnection();
   };
  
-  return { connected, connecting, connection, connect, disconnect, error };
+  return { connected, connecting, connection, connect, disconnect, error, chainId, address };
 };
 

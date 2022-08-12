@@ -6,7 +6,6 @@ import { useContext } from "react";
 import { WebConnectionCtx } from "../context";
 import { Web3Connection } from "@taikai/dappkit";
 import { useBalance } from "../hooks/useBalance";
-import { useAddress } from "../hooks/useAddress";
 import { useERC20Balance } from "../hooks/useERC20Balance";
 import { useWeb3 } from "../hooks/useWeb3";
 import { dappConfig } from "../config";
@@ -14,14 +13,17 @@ import { dappConfig } from "../config";
 
 const ShowWalletDetails = ()=> {
   const web3Con: Web3Connection = useContext(WebConnectionCtx);
+  const { address, chainId }  = useWeb3(web3Con);
   const { balance } = useBalance(web3Con);
-  const { address } = useAddress(web3Con);
   const { balance: beproBalance } = useERC20Balance(
     web3Con, 
     dappConfig.beproContracAddress, 
     address
   );
   return <>
+      <GridRow>
+        <GridCol>{chainId}</GridCol>
+      </GridRow>
       <GridRow>
         <GridCol>{address}</GridCol>
       </GridRow>
