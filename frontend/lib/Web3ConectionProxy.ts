@@ -1,7 +1,6 @@
 import { Web3Connection } from "@taikai/dappkit";
 
 import { chainDict } from "../constants/networks";
-import { dappConfig } from "../config";
 import {
   IWeb3ConnectionProxy,
   Web3ConnectionProxyEventReactor,
@@ -111,7 +110,6 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
           return false;
         }
       } else {
-        console.log("Connection is ready");
         await this._onConnectionReady(connectedChainID);
       }
     } catch (e: any) {
@@ -154,18 +152,18 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
       }
     } catch (switchError: any) {
       if (switchError.code === 4902) {
-        if (dappConfig.addNewortk) {
+        if (this._options.addNewortk) {
           this.addNetwork();
         }
         this.onError(
           new Error(
-            `Failed to Connect to Chain ${dappConfig.chainId} - Unrecognized Network`
+            `Failed to Connect to Chain ${this._chainId} - Unrecognized Network`
           )
         );
       } else {
         this.onError(
           new Error(
-            `Failed to Connect to Chain ${dappConfig.chainId} - ${switchError.message}`
+            `Failed to Connect to Chain ${this._chainId} - ${switchError.message}`
           )
         );
       }
@@ -182,14 +180,14 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
         method: "wallet_addEthereumChain",
         params: [
           {
-            chainId: this._connection.utils.numberToHex(dappConfig.chainId),
-            chainName: chainDict[dappConfig.chainId].name,
-            rpcUrls: [chainDict[dappConfig.chainId].rpc],
+            chainId: this._connection.utils.numberToHex(this._chainId),
+            chainName: chainDict[this._chainId].name,
+            rpcUrls: [chainDict[this._chainId].rpc],
           },
         ],
       });
       const connectedChainId = await this._connection.eth.getChainId();
-      if (dappConfig.chainId !== connectedChainId) {
+      if (this._chainId !== connectedChainId) {
         this.onError(
           new Error(`Connected to the wrong Chain Id ${connectedChainId} `)
         );
@@ -200,7 +198,7 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
     } catch (addError: any) {
       this.onError(
         new Error(
-          `Failed to Add Supported chain ${dappConfig.chainId} - ${addError.message}`
+          `Failed to Add Supported chain ${this._chainId} - ${addError.message}`
         )
       );
       return false;
@@ -221,7 +219,7 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
       }
     });
     if (
-      dappConfig.disconnectOnSwitchAccount &&
+      this._options.disconnectOnSwitchAccount &&
       this._address &&
       newAddress &&
       newAddress != this._address
@@ -239,7 +237,7 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
       }
     });
     if (
-      dappConfig.disconnectOnChangeNetwork &&
+      this._options.disconnectOnChangeNetwork &&
       newChainId &&
       this._connection.utils.numberToHex(this._connectedChain) !== newChainId
     ) {
@@ -261,7 +259,6 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
         this._onChainChanged.bind(this)
       );
       this._reactors.forEach((reactor) => {
-        console.log("calling event");
         if (reactor.onConnectionEvent) {
           reactor.onConnectionEvent({
             chainId: this._connectedChain,
