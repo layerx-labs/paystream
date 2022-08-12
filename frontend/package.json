@@ -12,7 +12,9 @@
   "dependencies": {
     "@taikai/dappkit": "2.0.7",
     "@taikai/rocket-kit": "^2.0.1",
+    "apollo-server": "3.10.1",
     "dotenv": "^16.0.1",
+    "graphql": "16.5.0",
     "next": "12.2.3",
     "paystream-sdk": "file:../sdk",
     "react": "18.2.0",
