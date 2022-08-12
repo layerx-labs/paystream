@@ -99,7 +99,10 @@ import { Prisma } from '@prisma/client';\n\n`;
       encoding: 'utf-8',
     }
   );
-  console.info('Generated inputs successfully', `see: ${config.outputPath}`);
+  console.info(
+    'Generated Prisma Inputs successfully',
+    `see: ${config.outputPath}`
+  );
 }
 
 start(config);
