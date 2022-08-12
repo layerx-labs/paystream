@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import CustomError from '../errors/custom-error';
+import CustomError from '../../errors/custom-error';
 import {
   GeneratedCreateInputs,
   GeneratedUpdateInputs,

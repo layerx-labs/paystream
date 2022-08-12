@@ -3,7 +3,7 @@ import { PrismaClient, Prisma } from '@prisma/client';
 import CustomError, {
   ApiErrorsStatusCode,
   ApiErrorsType,
-} from '../errors/custom-error';
+} from '../../errors/custom-error';
 import {
   IErrorHandler,
   InfoToSelect,

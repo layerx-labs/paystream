@@ -73,6 +73,10 @@ function generateEntities(config: IConfig) {
   return entities?.concat(res) ?? '';
 }
 
+/**
+ * Generate Inputs for Prisma Models
+ * @param config
+ */
 function start(config: IConfig) {
   const header = `
 /** 
