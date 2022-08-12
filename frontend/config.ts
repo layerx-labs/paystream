@@ -15,6 +15,5 @@ export const dappConfig: DappConfiguration = {
     switchNetwork: true,
     addNewortk: true,
     disconnectOnSwitchAccount: true,
-    disconnectOnChangeNetwork: true, 
-
+    disconnectOnChangeNetwork: true,
 };

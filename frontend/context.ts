@@ -1,8 +1,20 @@
-import { Web3Connection } from '@taikai/dappkit';
+import ConnectionProxy from "./lib/Web3ConectionProxy";
 import React from 'react';
 
+import { chainDict } from "./constants/networks";
+import { dappConfig } from "./config";
 
-export const WebConnectionCtx = React.createContext(new Web3Connection({
-    web3Host: "http://localhost:8545",
-}));
+export const defaulProxy = new ConnectionProxy(
+    dappConfig.chainId,
+    chainDict[dappConfig.chainId].rpc,
+    {
+        autonnect: false,
+        switchNetwork: true,
+        addNewortk: true,
+        disconnectOnSwitchAccount: false,
+        disconnectOnChangeNetwork: false,
+    }
+)
+
+export const WebConnectionCtx = React.createContext(defaulProxy);
 

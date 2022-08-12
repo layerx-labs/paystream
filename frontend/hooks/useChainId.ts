@@ -1,18 +1,33 @@
-import { useEffect, useState, useCallback} from "react";
-import { Web3Connection } from "@taikai/dappkit";
+import { useEffect, useState, useContext } from "react";
+import { WebConnectionCtx } from "../context";
+import {
+  ConnectionEvent,
+  DisconnectEvent,
+  ChangeNetworkEvent,
+  ChangeAccountEvent,
+} from "../lib/IWeb3ConnectionProxy";
+import { IWeb3ConnectionProxy } from "../lib/IWeb3ConnectionProxy";
 
- const useChainId = (connection: Web3Connection) => {
-    const [chainId, setChainId] = useState(0);
-  
-    useEffect(()=> {
-      if(connection.started) {
-        connection.eth.getChainId().then((connectedChainId)=> {
-          setChainId(connectedChainId);
-        });   
-      }    
-    }, [connection]);
-  
-    return chainId;
-}
+const useChainId = () => {
+  const proxy: IWeb3ConnectionProxy = useContext(WebConnectionCtx);
+  const [chainId, setChainId] = useState(proxy.isConnected()? proxy.getChainId(): 0);
+  const reactor = {
+    onConnectionEvent: (event: ConnectionEvent) => {
+      setChainId(event.chainId);
+    },
+    onDisconnectEvent: () => {
+      setChainId(0);
+    },
+  };
+
+  useEffect(() => {
+    proxy.subscribe(reactor);
+    return () => {
+      proxy.unsubscribe(reactor);
+    };
+  }, []);
+
+  return chainId;
+};
 
 export default useChainId;
