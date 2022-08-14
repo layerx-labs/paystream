@@ -1,17 +1,21 @@
 import { mergeTypeDefs } from '@graphql-tools/merge';
-import { sdlInputs } from '@paljs/plugins';
 import { print } from 'graphql';
 import { writeFileSync } from 'fs';
 import * as path from 'path';
+import { sdlInputs } from './sdl-inputs';
+import { getDMMF } from '@prisma/internals';
 
-const outputPath = path.resolve('server/graphql/generated/inputs.graphql');
-const typeDefs = mergeTypeDefs([sdlInputs()]);
+async function start() {
+  const outputPath = path.resolve('server/graphql/generated/inputs.graphql');
 
-const printedTypeDefs = print(typeDefs);
+  const dmmf = await getDMMF({
+    datamodelPath: path.resolve('server/prisma/schema.prisma'),
+  });
+  const typeDefs = mergeTypeDefs([sdlInputs({ dmmf })]);
 
-function start() {
+  const printedTypeDefs = print(typeDefs);
   writeFileSync(outputPath, printedTypeDefs, { encoding: 'utf8' });
   console.info('Generated GQL Inputs successfully', `see: ${outputPath}`);
 }
 
-start();
+start().then().catch(console.error);
