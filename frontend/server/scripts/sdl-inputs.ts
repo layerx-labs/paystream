@@ -85,13 +85,14 @@ function generateInputsString(options: OptionsType) {
       inputObjectTypes.push(...schema.inputObjectTypes.model);
 
     inputObjectTypes.forEach(input => {
-      if (input.fields.length > 0) {
+      const inputFields =
+        typeof options?.filterInputs === 'function'
+          ? options.filterInputs(input)
+          : input.fields;
+
+      if (inputFields.length) {
         fileContent += `input ${input.name} {
       `;
-        const inputFields =
-          typeof options?.filterInputs === 'function'
-            ? options.filterInputs(input)
-            : input.fields;
         inputFields
           .filter(field => !options?.excludeFields?.includes(field.name))
           .forEach(field => {
@@ -111,37 +112,14 @@ function generateInputsString(options: OptionsType) {
   `;
       }
     });
-
-    schema?.outputObjectTypes.prisma
-      .filter(
-        type =>
-          type.name.includes('Aggregate') ||
-          type.name.endsWith('CountOutputType')
-      )
-      .forEach(type => {
-        fileContent += `type ${type.name} {
-      `;
-        type.fields
-          .filter(field => !options?.excludeFields?.includes(field.name))
-          .forEach(field => {
-            fileContent += `${field.name}: ${
-              field.outputType.isList
-                ? `[${field.outputType.type}!]`
-                : field.outputType.type
-            }${!field.isNullable ? '!' : ''}
-        `;
-          });
-        fileContent += `}
-    
-  `;
-      });
   }
   return fileContent;
 }
 
 export const sdlInputs = (options: OptionsType) => {
   const gql = require('graphql-tag');
+  const generatedInputsString = generateInputsString(options);
   return gql`
-    ${generateInputsString(options)}
+    ${generatedInputsString}
   `;
 };
