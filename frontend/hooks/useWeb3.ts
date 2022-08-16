@@ -1,120 +1,45 @@
-import { useEffect, useState } from "react";
-import { Web3Connection } from "@taikai/dappkit";
-import { chainDict } from "../constants/networks";
+import { useEffect, useState, useContext } from "react";
 
-interface WebHookOptions {
-  autonnect: boolean, 
-  switchNetwork?: boolean,
-  addNewortk?: boolean
-}
+import { WebConnectionCtx } from "../context";
+import { IWeb3ConnectionProxy, ChangeNetworkEvent, ChangeAccountEvent} from "../lib/IWeb3ConnectionProxy";
 
-export const useWeb3 = (
-  connection: Web3Connection, 
-  chainId: number,
-  options: WebHookOptions
-  ) => 
-  {
-  const [connected, setConnected] = useState(false);
-  const [connecting, setConnecting] = useState(false);
+export const useWeb3 = () => {
+  const proxy: IWeb3ConnectionProxy = useContext(WebConnectionCtx);
+  const [connected, setConnected] = useState(proxy.isConnected());
+  const address = proxy.getAddress();
+  const chainId = proxy.getChainId();
   const [error, setError] = useState("");
 
-  const addNetwork = async () => {
-    try {
-      setConnecting(true);
-      await (window as any).ethereum.request({
-        method: 'wallet_addEthereumChain',
-        params: [
-          {
-            chainId: connection.utils.numberToHex(chainId),
-            chainName: chainDict[chainId].name,
-            rpcUrls: [chainDict[chainId].rpc]
-          },
-        ],
-      });
-      const networkID = await connection.eth.getChainId();
-      if (chainId !== networkID) { 
-        setError(`Connected to the wrong Chain Id ${networkID} `);
-      } else {
-        setConnected(true);
-        setError("");
-      }
-    } catch (addError: any) {
-      setError(`Failed to Add Supported chain ${chainId} - ${addError.message}`);
-    } finally {
-      setConnecting(false);
-    }
-  }
-
-  const switchChain = async () => {
-    try {
-      setConnecting(true);      
-      console.log(`Switching to ${chainId} network`);
-      await (window as any).ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: connection.utils.numberToHex(chainId)}],
-      });      
-      const networkID = await connection.eth.getChainId();   
-      if (chainId !== networkID) { 
-        setError(`Connected to the wrong Chain Id ${networkID} `);
-      } else {
-        setConnected(true);
-        setError("");
-      }
-    } catch (switchError: any) {
-      if (switchError.code === 4902) {
-        console.log("Adding new chain");
-        if (options.addNewortk) {
-          addNetwork();
-        }
-        setError(`Failed to Connect to Chain ${chainId} - Unrecognized Network`);
-      } else {
-        setError(`Failed to Connect to Chain ${chainId} - ${switchError.message}`);
-      }      
-    } finally {
-      setConnecting(false);
-    }
-  }
-
-  const startConnection = async () => {
-    setConnecting(true);
-    try {
-      // 1. Tries to connect 
-      const res = await connection.connect();
-      // 2. Verify if you are connected to right network p.ex based on Network Id
-      const networkID = await connection.eth.getChainId();
-      if (chainId !== networkID) {       
-        // 3. Tries to force the change network
-        if(options.switchNetwork) {
-          switchChain();
-        } else {
-          setError(`You are connected to the wrong chain ${networkID}`);
-        }        
-      } else {
-        setConnected(res);
-      }      
-    } catch (e: any) {
+  const reactor = {
+    onConnectionEvent: () => {
+      setConnected(true);
+    },
+    onDisconnectEvent: () => {
+      setConnected(false);
+    },
+    onError: (e: Error) => {
+      console.error(e);
       setError(e.message);
-    } finally {
-      setConnecting(false);
-    }    
+    },
   };
 
   useEffect(() => {
-    if (options.autonnect) {
-      startConnection();
-    }
+    proxy.subscribe(reactor);
+    return () => {
+      proxy.unsubscribe(reactor);
+    };
   }, []);
 
-  const connect = () => {
-    startConnection();
+  return {
+    connected,
+    connect: () => {
+      proxy.connect();
+    },
+    disconnect: () => {
+      proxy.disconnect();
+    },
+    error,
+    chainId,
+    address,
   };
-
-  const disconnect = () => {
-    if (connected) {
-      setConnected(false);
-      setError("");
-    }
-  };
-  return { connected, connecting, connection, connect, disconnect, error };
 };
-

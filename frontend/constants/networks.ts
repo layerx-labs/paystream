@@ -4,7 +4,7 @@ enum ChainName {
   AFRODITE = "Afrodite",
   IRENE = "Irene",
   IRIS = "Iris",
-  LOCAL = "Localhost",
+  LOCAL = "Local",
 }
 
 export enum ChainId {
