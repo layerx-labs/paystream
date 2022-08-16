@@ -17,11 +17,8 @@ async function start() {
     'WithAggregatesInput',
     'UncheckedCreateInput',
     'UncheckedUpdateInput',
-    'CreateMany',
-    'UpdateMany',
     'OrderByAggregateInput',
     'WithAggregatesFilter',
-    'Without',
   ];
 
   const typeDefs = mergeTypeDefs([
