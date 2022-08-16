@@ -3,3 +3,570 @@ scalar DateTime
 type BatchPayload {
   count: Int!
 }
+
+enum QueryMode {
+  default
+  insensitive
+}
+
+enum SortOrder {
+  asc
+  desc
+}
+
+enum StreamScalarFieldEnum {
+  id
+  streamId
+  sender
+  recipient
+  tokenAddress
+  deposit
+  startTime
+  stopTime
+  status
+  createdAt
+  updatedAt
+}
+
+enum TransactionIsolationLevel {
+  ReadUncommitted
+  ReadCommitted
+  RepeatableRead
+  Serializable
+}
+
+enum WithdrawFromStreamScalarFieldEnum {
+  id
+  streamId
+  recipient
+  amount
+  createdAt
+  updatedAt
+}
+
+enum StreamStatus {
+  CANCELED
+  ACTIVE
+}
+
+input StreamWhereInput {
+  AND: [StreamWhereInput!]
+  OR: [StreamWhereInput!]
+  NOT: [StreamWhereInput!]
+  id: StringFilter
+  streamId: IntFilter
+  sender: StringFilter
+  recipient: StringFilter
+  tokenAddress: StringFilter
+  deposit: IntFilter
+  startTime: DateTimeFilter
+  stopTime: DateTimeFilter
+  withdrawsFromStream: WithdrawFromStreamListRelationFilter
+  status: EnumStreamStatusFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+}
+
+input StreamOrderByWithRelationInput {
+  id: SortOrder
+  streamId: SortOrder
+  sender: SortOrder
+  recipient: SortOrder
+  tokenAddress: SortOrder
+  deposit: SortOrder
+  startTime: SortOrder
+  stopTime: SortOrder
+  withdrawsFromStream: WithdrawFromStreamOrderByRelationAggregateInput
+  status: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+}
+
+input StreamWhereUniqueInput {
+  id: String
+  streamId: Int
+}
+
+input WithdrawFromStreamWhereInput {
+  AND: [WithdrawFromStreamWhereInput!]
+  OR: [WithdrawFromStreamWhereInput!]
+  NOT: [WithdrawFromStreamWhereInput!]
+  id: StringFilter
+  streamId: StringFilter
+  stream: StreamWhereInput
+  recipient: StringFilter
+  amount: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+}
+
+input WithdrawFromStreamOrderByWithRelationInput {
+  id: SortOrder
+  streamId: SortOrder
+  stream: StreamOrderByWithRelationInput
+  recipient: SortOrder
+  amount: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+}
+
+input WithdrawFromStreamWhereUniqueInput {
+  id: String
+}
+
+input StreamCreateInput {
+  id: String
+  streamId: Int!
+  sender: String!
+  recipient: String!
+  tokenAddress: String!
+  deposit: Int!
+  startTime: DateTime!
+  stopTime: DateTime!
+  withdrawsFromStream: WithdrawFromStreamCreateNestedManyWithoutStreamInput
+  status: StreamStatus
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input StreamUpdateInput {
+  id: StringFieldUpdateOperationsInput
+  streamId: IntFieldUpdateOperationsInput
+  sender: StringFieldUpdateOperationsInput
+  recipient: StringFieldUpdateOperationsInput
+  tokenAddress: StringFieldUpdateOperationsInput
+  deposit: IntFieldUpdateOperationsInput
+  startTime: DateTimeFieldUpdateOperationsInput
+  stopTime: DateTimeFieldUpdateOperationsInput
+  withdrawsFromStream: WithdrawFromStreamUpdateManyWithoutStreamNestedInput
+  status: EnumStreamStatusFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input StreamCreateManyInput {
+  id: String
+  streamId: Int!
+  sender: String!
+  recipient: String!
+  tokenAddress: String!
+  deposit: Int!
+  startTime: DateTime!
+  stopTime: DateTime!
+  status: StreamStatus
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input StreamUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+  streamId: IntFieldUpdateOperationsInput
+  sender: StringFieldUpdateOperationsInput
+  recipient: StringFieldUpdateOperationsInput
+  tokenAddress: StringFieldUpdateOperationsInput
+  deposit: IntFieldUpdateOperationsInput
+  startTime: DateTimeFieldUpdateOperationsInput
+  stopTime: DateTimeFieldUpdateOperationsInput
+  status: EnumStreamStatusFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input StreamUncheckedUpdateManyInput {
+  id: StringFieldUpdateOperationsInput
+  streamId: IntFieldUpdateOperationsInput
+  sender: StringFieldUpdateOperationsInput
+  recipient: StringFieldUpdateOperationsInput
+  tokenAddress: StringFieldUpdateOperationsInput
+  deposit: IntFieldUpdateOperationsInput
+  startTime: DateTimeFieldUpdateOperationsInput
+  stopTime: DateTimeFieldUpdateOperationsInput
+  status: EnumStreamStatusFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input WithdrawFromStreamCreateInput {
+  id: String
+  stream: StreamCreateNestedOneWithoutWithdrawsFromStreamInput!
+  recipient: String!
+  amount: Int!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input WithdrawFromStreamUpdateInput {
+  id: StringFieldUpdateOperationsInput
+  stream: StreamUpdateOneRequiredWithoutWithdrawsFromStreamNestedInput
+  recipient: StringFieldUpdateOperationsInput
+  amount: IntFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input WithdrawFromStreamCreateManyInput {
+  id: String
+  streamId: String!
+  recipient: String!
+  amount: Int!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input WithdrawFromStreamUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+  recipient: StringFieldUpdateOperationsInput
+  amount: IntFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input WithdrawFromStreamUncheckedUpdateManyInput {
+  id: StringFieldUpdateOperationsInput
+  streamId: StringFieldUpdateOperationsInput
+  recipient: StringFieldUpdateOperationsInput
+  amount: IntFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input StringFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: NestedStringFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: NestedIntFilter
+}
+
+input DateTimeFilter {
+  equals: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+  not: NestedDateTimeFilter
+}
+
+input WithdrawFromStreamListRelationFilter {
+  every: WithdrawFromStreamWhereInput
+  some: WithdrawFromStreamWhereInput
+  none: WithdrawFromStreamWhereInput
+}
+
+input EnumStreamStatusFilter {
+  equals: StreamStatus
+  in: [StreamStatus!]
+  notIn: [StreamStatus!]
+  not: NestedEnumStreamStatusFilter
+}
+
+input WithdrawFromStreamOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input StreamRelationFilter {
+  is: StreamWhereInput
+  isNot: StreamWhereInput
+}
+
+input WithdrawFromStreamCreateNestedManyWithoutStreamInput {
+  create: [WithdrawFromStreamCreateWithoutStreamInput!]
+  connectOrCreate: [WithdrawFromStreamCreateOrConnectWithoutStreamInput!]
+  createMany: WithdrawFromStreamCreateManyStreamInputEnvelope
+  connect: [WithdrawFromStreamWhereUniqueInput!]
+}
+
+input WithdrawFromStreamUncheckedCreateNestedManyWithoutStreamInput {
+  create: [WithdrawFromStreamCreateWithoutStreamInput!]
+  connectOrCreate: [WithdrawFromStreamCreateOrConnectWithoutStreamInput!]
+  createMany: WithdrawFromStreamCreateManyStreamInputEnvelope
+  connect: [WithdrawFromStreamWhereUniqueInput!]
+}
+
+input StringFieldUpdateOperationsInput {
+  set: String
+}
+
+input IntFieldUpdateOperationsInput {
+  set: Int
+  increment: Int
+  decrement: Int
+  multiply: Int
+  divide: Int
+}
+
+input DateTimeFieldUpdateOperationsInput {
+  set: DateTime
+}
+
+input WithdrawFromStreamUpdateManyWithoutStreamNestedInput {
+  create: [WithdrawFromStreamCreateWithoutStreamInput!]
+  connectOrCreate: [WithdrawFromStreamCreateOrConnectWithoutStreamInput!]
+  upsert: [WithdrawFromStreamUpsertWithWhereUniqueWithoutStreamInput!]
+  createMany: WithdrawFromStreamCreateManyStreamInputEnvelope
+  set: [WithdrawFromStreamWhereUniqueInput!]
+  disconnect: [WithdrawFromStreamWhereUniqueInput!]
+  delete: [WithdrawFromStreamWhereUniqueInput!]
+  connect: [WithdrawFromStreamWhereUniqueInput!]
+  update: [WithdrawFromStreamUpdateWithWhereUniqueWithoutStreamInput!]
+  updateMany: [WithdrawFromStreamUpdateManyWithWhereWithoutStreamInput!]
+  deleteMany: [WithdrawFromStreamScalarWhereInput!]
+}
+
+input EnumStreamStatusFieldUpdateOperationsInput {
+  set: StreamStatus
+}
+
+input WithdrawFromStreamUncheckedUpdateManyWithoutStreamNestedInput {
+  create: [WithdrawFromStreamCreateWithoutStreamInput!]
+  connectOrCreate: [WithdrawFromStreamCreateOrConnectWithoutStreamInput!]
+  upsert: [WithdrawFromStreamUpsertWithWhereUniqueWithoutStreamInput!]
+  createMany: WithdrawFromStreamCreateManyStreamInputEnvelope
+  set: [WithdrawFromStreamWhereUniqueInput!]
+  disconnect: [WithdrawFromStreamWhereUniqueInput!]
+  delete: [WithdrawFromStreamWhereUniqueInput!]
+  connect: [WithdrawFromStreamWhereUniqueInput!]
+  update: [WithdrawFromStreamUpdateWithWhereUniqueWithoutStreamInput!]
+  updateMany: [WithdrawFromStreamUpdateManyWithWhereWithoutStreamInput!]
+  deleteMany: [WithdrawFromStreamScalarWhereInput!]
+}
+
+input StreamCreateNestedOneWithoutWithdrawsFromStreamInput {
+  create: StreamUncheckedCreateWithoutWithdrawsFromStreamInput
+  connectOrCreate: StreamCreateOrConnectWithoutWithdrawsFromStreamInput
+  connect: StreamWhereUniqueInput
+}
+
+input StreamUpdateOneRequiredWithoutWithdrawsFromStreamNestedInput {
+  create: StreamUncheckedCreateWithoutWithdrawsFromStreamInput
+  connectOrCreate: StreamCreateOrConnectWithoutWithdrawsFromStreamInput
+  upsert: StreamUpsertWithoutWithdrawsFromStreamInput
+  connect: StreamWhereUniqueInput
+  update: StreamUncheckedUpdateWithoutWithdrawsFromStreamInput
+}
+
+input NestedStringFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringFilter
+}
+
+input NestedIntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: NestedIntFilter
+}
+
+input NestedDateTimeFilter {
+  equals: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+  not: NestedDateTimeFilter
+}
+
+input NestedEnumStreamStatusFilter {
+  equals: StreamStatus
+  in: [StreamStatus!]
+  notIn: [StreamStatus!]
+  not: NestedEnumStreamStatusFilter
+}
+
+input NestedFloatFilter {
+  equals: Float
+  in: [Float!]
+  notIn: [Float!]
+  lt: Float
+  lte: Float
+  gt: Float
+  gte: Float
+  not: NestedFloatFilter
+}
+
+input WithdrawFromStreamCreateWithoutStreamInput {
+  id: String
+  recipient: String!
+  amount: Int!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input WithdrawFromStreamUncheckedCreateWithoutStreamInput {
+  id: String
+  recipient: String!
+  amount: Int!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input WithdrawFromStreamCreateOrConnectWithoutStreamInput {
+  where: WithdrawFromStreamWhereUniqueInput!
+  create: WithdrawFromStreamUncheckedCreateWithoutStreamInput!
+}
+
+input WithdrawFromStreamCreateManyStreamInputEnvelope {
+  data: [WithdrawFromStreamCreateManyStreamInput!]!
+  skipDuplicates: Boolean
+}
+
+input WithdrawFromStreamUpsertWithWhereUniqueWithoutStreamInput {
+  where: WithdrawFromStreamWhereUniqueInput!
+  update: WithdrawFromStreamUncheckedUpdateWithoutStreamInput!
+  create: WithdrawFromStreamUncheckedCreateWithoutStreamInput!
+}
+
+input WithdrawFromStreamUpdateWithWhereUniqueWithoutStreamInput {
+  where: WithdrawFromStreamWhereUniqueInput!
+  data: WithdrawFromStreamUncheckedUpdateWithoutStreamInput!
+}
+
+input WithdrawFromStreamUpdateManyWithWhereWithoutStreamInput {
+  where: WithdrawFromStreamScalarWhereInput!
+  data: WithdrawFromStreamUncheckedUpdateManyWithoutWithdrawsFromStreamInput!
+}
+
+input WithdrawFromStreamScalarWhereInput {
+  AND: [WithdrawFromStreamScalarWhereInput!]
+  OR: [WithdrawFromStreamScalarWhereInput!]
+  NOT: [WithdrawFromStreamScalarWhereInput!]
+  id: StringFilter
+  streamId: StringFilter
+  recipient: StringFilter
+  amount: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+}
+
+input StreamCreateWithoutWithdrawsFromStreamInput {
+  id: String
+  streamId: Int!
+  sender: String!
+  recipient: String!
+  tokenAddress: String!
+  deposit: Int!
+  startTime: DateTime!
+  stopTime: DateTime!
+  status: StreamStatus
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input StreamUncheckedCreateWithoutWithdrawsFromStreamInput {
+  id: String
+  streamId: Int!
+  sender: String!
+  recipient: String!
+  tokenAddress: String!
+  deposit: Int!
+  startTime: DateTime!
+  stopTime: DateTime!
+  status: StreamStatus
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input StreamCreateOrConnectWithoutWithdrawsFromStreamInput {
+  where: StreamWhereUniqueInput!
+  create: StreamUncheckedCreateWithoutWithdrawsFromStreamInput!
+}
+
+input StreamUpsertWithoutWithdrawsFromStreamInput {
+  update: StreamUncheckedUpdateWithoutWithdrawsFromStreamInput!
+  create: StreamUncheckedCreateWithoutWithdrawsFromStreamInput!
+}
+
+input StreamUpdateWithoutWithdrawsFromStreamInput {
+  id: StringFieldUpdateOperationsInput
+  streamId: IntFieldUpdateOperationsInput
+  sender: StringFieldUpdateOperationsInput
+  recipient: StringFieldUpdateOperationsInput
+  tokenAddress: StringFieldUpdateOperationsInput
+  deposit: IntFieldUpdateOperationsInput
+  startTime: DateTimeFieldUpdateOperationsInput
+  stopTime: DateTimeFieldUpdateOperationsInput
+  status: EnumStreamStatusFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input StreamUncheckedUpdateWithoutWithdrawsFromStreamInput {
+  id: StringFieldUpdateOperationsInput
+  streamId: IntFieldUpdateOperationsInput
+  sender: StringFieldUpdateOperationsInput
+  recipient: StringFieldUpdateOperationsInput
+  tokenAddress: StringFieldUpdateOperationsInput
+  deposit: IntFieldUpdateOperationsInput
+  startTime: DateTimeFieldUpdateOperationsInput
+  stopTime: DateTimeFieldUpdateOperationsInput
+  status: EnumStreamStatusFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input WithdrawFromStreamCreateManyStreamInput {
+  id: String
+  recipient: String!
+  amount: Int!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input WithdrawFromStreamUpdateWithoutStreamInput {
+  id: StringFieldUpdateOperationsInput
+  recipient: StringFieldUpdateOperationsInput
+  amount: IntFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input WithdrawFromStreamUncheckedUpdateWithoutStreamInput {
+  id: StringFieldUpdateOperationsInput
+  recipient: StringFieldUpdateOperationsInput
+  amount: IntFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input WithdrawFromStreamUncheckedUpdateManyWithoutWithdrawsFromStreamInput {
+  id: StringFieldUpdateOperationsInput
+  recipient: StringFieldUpdateOperationsInput
+  amount: IntFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}

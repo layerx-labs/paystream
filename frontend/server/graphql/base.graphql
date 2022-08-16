@@ -1,0 +1,11 @@
+interface Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type PageInfo {
+  perPage: Int
+  pageCount: Int
+  recordCount: Int
+}
