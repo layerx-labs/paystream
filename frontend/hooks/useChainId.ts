@@ -2,9 +2,6 @@ import { useEffect, useState, useContext } from "react";
 import { WebConnectionCtx } from "../context";
 import {
   ConnectionEvent,
-  DisconnectEvent,
-  ChangeNetworkEvent,
-  ChangeAccountEvent,
 } from "../lib/IWeb3ConnectionProxy";
 import { IWeb3ConnectionProxy } from "../lib/IWeb3ConnectionProxy";
 

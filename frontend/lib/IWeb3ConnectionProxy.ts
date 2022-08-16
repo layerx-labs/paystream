@@ -1,6 +1,6 @@
 import { Web3Connection } from "@taikai/dappkit";
 
-export type Web3ConnectionProxyEvent = ConnectionEvent | DisconnectEvent | ChangeNetworkEvent | ChangeAccountEvent;
+export type Web3ConnectionProxyEvent = ConnectionEvent & DisconnectEvent & ChangeNetworkEvent & ChangeAccountEvent;
 
 export type ConnectionEvent = {
     chainId: number;
