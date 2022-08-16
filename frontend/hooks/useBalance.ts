@@ -1,28 +1,29 @@
-import { ETHUtils, Web3Connection } from "@taikai/dappkit";
-import { useEffect, useState } from "react";
-import { BigNumber } from "bignumber.js";
-import {Unit} from 'web3-utils';
+import { useEffect, useState, useContext} from "react";
+import { WebConnectionCtx } from "../context";
 
-export const useBalance = (con: Web3Connection, isConnected: boolean) => {
+export const useBalance = () => {  
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [balance, setBalance] = useState("");
-
+  const proxy = useContext(WebConnectionCtx);
+  
   useEffect(() => {
-    if (!con || !con.started || !isConnected) {
-      setLoading(false);
+    if (!proxy.isConnected()) {
       setBalance("");
       return;
     }
     setLoading(true);
-    con
+    proxy.getConnection()
       .getBalance()
       .then((newBalance) => {
-        const weiBalance = con.utils.fromWei(newBalance);
+        const weiBalance =  proxy.getConnection().utils.fromWei(newBalance);
         setBalance(weiBalance);      
       })
-      .catch(e=> setError(e.message));
-  }, [isConnected]);
+      .catch(e=> setError(e.message))
+      .finally(()=>{
+        setLoading(false);
+      });
+  }, []);
 
   return { error, loading, balance };
 };

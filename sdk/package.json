@@ -1,15 +1,14 @@
 {
   "name": "paystream-sdk",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/src/index.js",
+  "typings": "dist/src/index.d.ts",
   "scripts": {
     "compile": "npx hardhat compile",
     "prebuild": "npx dlt -j .config-launchpad.json -f build/contracts/protocol/Sablier.sol/Sablier.json",
     "prepublishOnly": "npm run build",
     "build": "npx tsc",
-    "lint": "npm run eslint -- --quiet",
-    "lint-fix": "npm run eslint -- --quiet --fix",
     "eslint": "eslint --ignore-path .eslintignore --ext .ts ./src",
     "deploy:local": "npx hardhat run --network hardhat scripts/deploy.ts",
     "deploy:kovan": "npx hardhat run --network kovan scripts/deploy.ts",
@@ -55,10 +54,18 @@
     "solidity-coverage": "^0.7.21",
     "ts-node": "^10.9.1",
     "typechain": "^8.1.0",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "tslib": "^2.0.3"
   },
   "files": [
     "dist",
     "README.md"
-  ]
+  ],
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "arrowParens": "avoid"
+  }
 }

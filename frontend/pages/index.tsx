@@ -2,33 +2,38 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { GridContainer, GridCol, GridRow, Button } from "@taikai/rocket-kit";
-import { useContext } from "react";
-import { WebConnectionCtx } from "../context";
-import { Web3Connection } from "@taikai/dappkit";
 import { useBalance } from "../hooks/useBalance";
-import { useAddress } from "../hooks/useAddress";
 import { useERC20Balance } from "../hooks/useERC20Balance";
 import { useWeb3 } from "../hooks/useWeb3";
-import { ChainId } from "../constants/networks";
+import { dappConfig } from "../config";
 
-const Home: NextPage = () => {
- 
-  const web3Con: Web3Connection = useContext(WebConnectionCtx);
-  const {connected, connecting, connect , error, disconnect }  = useWeb3(web3Con, 
-    ChainId.IRENE, { 
-      autonnect: false ,
-      switchNetwork: true,
-      addNewortk: true,
-    }
-  );
-  const { balance } = useBalance(web3Con, connected);
-  const { address } = useAddress(web3Con, connected);
+const ShowWalletDetails = ()=> {
+  
+  const { address, chainId }  = useWeb3();
+  const { balance } = useBalance();
   const { balance: beproBalance } = useERC20Balance(
-    web3Con, 
-    "0x37ebdd9B2adC5f8af3993256859c1Ea3BFE1465e", 
+    dappConfig.beproContracAddress, 
     address
   );
-  
+  return <>
+      <GridRow>
+        <GridCol>{chainId}</GridCol>
+      </GridRow>
+      <GridRow>
+        <GridCol>{address}</GridCol>
+      </GridRow>
+      <GridRow>
+        <GridCol>{balance} ETH</GridCol>
+      </GridRow>
+      <GridRow>
+        <GridCol>{beproBalance} BEPRO</GridCol>
+      </GridRow>
+    </>
+};
+
+const Home: NextPage = () => { 
+  const {connected, connect, disconnect, error } = useWeb3();
+
   return (
     <div className={styles.container}>
       <Head>
@@ -55,22 +60,7 @@ const Home: NextPage = () => {
             )}
           </GridCol>
         </GridRow>
-        {connected && (
-          <GridRow>
-            <GridCol>{address}</GridCol>
-          </GridRow>
-        )}
-        {connected && (
-          <GridRow>
-            <GridCol>{balance} ETH</GridCol>
-          </GridRow>
-        )}
-         {connected && (
-          <GridRow>
-            <GridCol>{beproBalance} BEPRO</GridCol>
-          </GridRow>
-        )}
-         
+        {connected && <ShowWalletDetails />}         
         {connected && (
           <GridRow>
             <GridCol>
@@ -94,14 +84,7 @@ const Home: NextPage = () => {
               <>Error: {error}</>
             </GridCol>
           </GridRow>
-        )}
-        {connecting && (
-          <GridRow>
-            <GridCol>
-              <>Connecting...</>
-            </GridCol>
-          </GridRow>
-        )}
+        )}       
       </GridContainer>
     </div>
   );
