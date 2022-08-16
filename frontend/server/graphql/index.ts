@@ -4,6 +4,7 @@ import * as path from 'path';
 
 const typesDef = loadFilesSync(path.resolve('server/graphql'), {
   extensions: ['graphql', 'gql'],
+  globOptions: { ignore: ['**/generated/schema.graphql'] },
   recursive: true,
   ignoreIndex: true,
 });
