@@ -1,7 +1,20 @@
 import * as path from 'path';
 import { mergeResolvers } from '@graphql-tools/merge';
-import { loadFilesSync } from '@graphql-tools/load-files';
+import { loadFiles } from '@graphql-tools/load-files';
 
-const resolverFiles = loadFilesSync(path.join(__dirname, './**/*.resolver.*'));
+export async function makeResolvers() {
+  const resolverFiles = await loadFiles(
+    path.resolve('server/resolvers/**/*.resolver.*'),
+    {
+      useRequire: true,
+      requireMethod: async (p: string) => {
+        const pathParsed = p.slice(
+          p.lastIndexOf('server/resolvers/') + 'server/resolvers/'.length
+        );
+        return await import(`./${pathParsed}`);
+      },
+    }
+  );
 
-export const resolvers = mergeResolvers(resolverFiles);
+  return mergeResolvers(resolverFiles);
+}
