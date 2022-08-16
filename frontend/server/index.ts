@@ -10,7 +10,7 @@ import depthLimit from 'graphql-depth-limit';
 import { scribal } from './services/logger';
 import { errorHandlingFunction } from './errors/error-handlers';
 import makeCors from 'micro-cors';
-import { resolvers } from './resolvers';
+import { makeResolvers } from './resolvers';
 import { typeDefs } from './graphql';
 
 const parseGqlLogger = (logger: typeof scribal) => ({
@@ -22,25 +22,25 @@ const parseGqlLogger = (logger: typeof scribal) => ({
 
 export const cors = makeCors({
   allowCredentials: true,
-  allowMethods: ['PUT', 'POST', 'OPTIONS'],
   origin: environment.corsAllowedOrigin,
 });
 
-export const apolloServer = new ApolloServer({
-  typeDefs,
-  resolvers,
-  csrfPrevention: true,
-  cache: 'bounded',
-  context: makeContext,
-  formatError: errorHandlingFunction,
-  logger: parseGqlLogger(scribal),
-  nodeEnv: getEnvironment(),
-  validationRules: [depthLimit(environment.graphQLDeepLimit)],
-  introspection: !isProduction,
-  debug: false,
-  plugins: [
-    ...(isProduction
-      ? [ApolloServerPluginLandingPageDisabled()]
-      : [ApolloServerPluginLandingPageGraphQLPlayground()]),
-  ],
-});
+export const makeApolloServer = async () =>
+  new ApolloServer({
+    typeDefs,
+    resolvers: await makeResolvers(),
+    csrfPrevention: true,
+    cache: 'bounded',
+    context: makeContext,
+    formatError: errorHandlingFunction,
+    logger: parseGqlLogger(scribal),
+    nodeEnv: getEnvironment(),
+    validationRules: [depthLimit(environment.graphQLDeepLimit)],
+    introspection: !isProduction,
+    debug: false,
+    plugins: [
+      ...(isProduction
+        ? [ApolloServerPluginLandingPageDisabled()]
+        : [ApolloServerPluginLandingPageGraphQLPlayground()]),
+    ],
+  });

@@ -1,14 +1,19 @@
-import { apolloServer, cors } from '../../server';
+import { makeApolloServer, cors } from '../../server';
 import { RequestHandler } from '../../server/server-types';
+import { ApolloServer } from 'apollo-server-micro';
 
-const startServer = apolloServer.start();
+let apolloServer: ApolloServer;
 
 const handler: RequestHandler = async (req, res) => {
+  if (!apolloServer) {
+    apolloServer = await makeApolloServer();
+    await apolloServer.start();
+  }
+
   if (req.method === 'OPTIONS') {
     res.end();
     return false;
   }
-  await startServer;
 
   await apolloServer.createHandler({
     path: '/api/graphql',
@@ -16,3 +21,9 @@ const handler: RequestHandler = async (req, res) => {
 };
 
 export default cors(handler);
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
