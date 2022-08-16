@@ -1,7 +1,8 @@
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { mergeTypeDefs } from '@graphql-tools/merge';
+import * as path from 'path';
 
-const typesDef = loadFilesSync(__dirname, {
+const typesDef = loadFilesSync(path.resolve('server/graphql'), {
   extensions: ['graphql', 'gql'],
   recursive: true,
   ignoreIndex: true,
