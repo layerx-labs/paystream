@@ -1,10 +1,16 @@
+import { QueryStreamArgs } from '../../../types/graphql-generated-types';
 import CustomError, {
   ApiErrorsStatusCode,
   ApiErrorsType,
 } from '../../errors/custom-error';
 import { IResolver } from '../resolvers-types';
 
-export const stream: IResolver = async (_, { id }, ctx, info) => {
+export const stream: IResolver<QueryStreamArgs> = async (
+  _,
+  { id },
+  ctx,
+  info
+) => {
   const stream = await ctx.db.stream.find({
     where: { id },
     info,

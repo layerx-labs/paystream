@@ -23,3 +23,9 @@ type Query {
   ): [Stream!]!
   streamsPageInfo(where: StreamWhereInput, perPage: Int): PageInfo!
 }
+
+type Mutation {
+  createStream(data: StreamCreateInput!): Stream!
+  deleteStream(id: ID!): Stream!
+  updateStream(id: ID!, data: StreamUpdateInput!): Stream!
+}
