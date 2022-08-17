@@ -60,7 +60,8 @@ export class ErrorHandler implements IErrorHandler {
       message: `${operation.toUpperCase()} Failed`,
       details: error,
     });
-    return error instanceof Prisma.PrismaClientKnownRequestError
+    return error instanceof Prisma.PrismaClientKnownRequestError &&
+      ErrorHandler[`error${error.code}` as PrismaClientKnownRequestErrorCode]
       ? ErrorHandler[`error${error.code}` as PrismaClientKnownRequestErrorCode](
           error,
           operation
