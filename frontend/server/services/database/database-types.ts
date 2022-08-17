@@ -187,7 +187,7 @@ export type DatabaseManagerProps<T> = {
   orm: T;
   makeOrmAdapter(props: OrmAdapterProps): IOrmAdapter;
   modelsNames: typeof Prisma.ModelName;
-  errorHandler: IErrorHandler;
+  errorHandler: IErrorHandler['errorHandler'];
   infoToSelect: InfoToSelect;
   tagToSelect: TagToSelect;
   selectParser: SelectParser;

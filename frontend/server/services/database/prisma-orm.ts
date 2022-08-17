@@ -46,7 +46,7 @@ export class ErrorHandler implements IErrorHandler {
     return new CustomError({
       code: ApiErrorsStatusCode.InvalidUserInput,
       type: ApiErrorsType.InternalError,
-      message: `${operation.toUpperCase()} Failed`,
+      message: `${operation.toUpperCase()} FAILED`,
       details: {
         [field]: `Could not ${operation} this row cause there is related data, ${operation} all ${field}s first`,
       },
@@ -57,7 +57,7 @@ export class ErrorHandler implements IErrorHandler {
     const defaultError = new CustomError({
       code: ApiErrorsStatusCode.InvalidUserInput,
       type: ApiErrorsType.InternalError,
-      message: `${operation.toUpperCase()} Failed`,
+      message: `${operation.toUpperCase()} FAILED`,
       details: error,
     });
     return error instanceof Prisma.PrismaClientKnownRequestError &&
