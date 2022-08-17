@@ -1,0 +1,31 @@
+type Stream implements Node {
+  id: ID!
+  streamId: Int!
+  sender: String!
+  recipient: String!
+  tokenAddress: String!
+  deposit: Int!
+  startTime: DateTime!
+  stopTime: DateTime!
+  withdrawsFromStream: [WithdrawFromStream!]
+  status: StreamStatus!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Query {
+  stream(id: ID!): Stream!
+  streams(
+    where: StreamWhereInput
+    orderBy: StreamOrderByWithRelationInput
+    page: Int
+    perPage: Int
+  ): [Stream!]!
+  streamsPageInfo(where: StreamWhereInput, perPage: Int): PageInfo!
+}
+
+type Mutation {
+  createStream(data: StreamCreateInput!): Stream!
+  deleteStream(id: ID!): Stream!
+  updateStream(id: ID!, data: StreamUpdateInput!): Stream!
+}

@@ -35,7 +35,7 @@ function makeDatabaseManager<T>({
       return acc;
     },
     {
-      _orm: { ...orm, ...errorHandler },
+      _orm: { ...orm, errorHandler },
     }
   ) as IDatabaseManager<typeof modelsNames> & {
     _orm: T & IErrorHandler;

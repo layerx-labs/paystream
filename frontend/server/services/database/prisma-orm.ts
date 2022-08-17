@@ -3,7 +3,7 @@ import { PrismaClient, Prisma } from '@prisma/client';
 import CustomError, {
   ApiErrorsStatusCode,
   ApiErrorsType,
-} from '../errors/custom-error';
+} from '../../errors/custom-error';
 import {
   IErrorHandler,
   InfoToSelect,
@@ -46,7 +46,7 @@ export class ErrorHandler implements IErrorHandler {
     return new CustomError({
       code: ApiErrorsStatusCode.InvalidUserInput,
       type: ApiErrorsType.InternalError,
-      message: `${operation.toUpperCase()} Failed`,
+      message: `${operation.toUpperCase()} FAILED`,
       details: {
         [field]: `Could not ${operation} this row cause there is related data, ${operation} all ${field}s first`,
       },
@@ -57,10 +57,11 @@ export class ErrorHandler implements IErrorHandler {
     const defaultError = new CustomError({
       code: ApiErrorsStatusCode.InvalidUserInput,
       type: ApiErrorsType.InternalError,
-      message: `${operation.toUpperCase()} Failed`,
+      message: `${operation.toUpperCase()} FAILED`,
       details: error,
     });
-    return error instanceof Prisma.PrismaClientKnownRequestError
+    return error instanceof Prisma.PrismaClientKnownRequestError &&
+      ErrorHandler[`error${error.code}` as PrismaClientKnownRequestErrorCode]
       ? ErrorHandler[`error${error.code}` as PrismaClientKnownRequestErrorCode](
           error,
           operation
