@@ -9,7 +9,11 @@ export const createStream: IResolver<MutationCreateStreamArgs> = async (
 ) => {
   try {
     const stream = await ctx.db.stream.create({
-      data,
+      data: {
+        ...data,
+        startTime: new Date(data.startTime),
+        stopTime: new Date(data.stopTime),
+      },
       info,
     });
 
