@@ -9,12 +9,12 @@ export type ResolverProps<Args = Record<string, any>> = {
   info: GraphQLResolveInfo;
 };
 
-export type IResolver<Args = Record<string, any>> = (
+export type IResolver<Args = Record<string, any>, R = any> = (
   parent: ResolverProps['parent'],
   args: ResolverProps<Args>['args'],
   ctx: ResolverProps['ctx'],
   info: ResolverProps['info']
-) => Promise<any>;
+) => Promise<R>;
 
 export type ListQueryProps = {
   model: keyof Omit<Context['db'], '_orm'>;
