@@ -2,11 +2,14 @@ import { useCallback, useState } from "react";
 import { ReceiptReactor, OnErrorReactor } from "../../interfaces";
 import { Sablier, SablierMethods } from "paystream-sdk";
 import { TransactionReceipt } from "@taikai/dappkit/dist/src/interfaces/web3-core";
+import { dappConfig } from "../../config";
+import { chainDict } from "../../constants/networks";
 
 export type MutationArgs = {
   onMutate?: ReceiptReactor;
   onError?: OnErrorReactor;
 };
+
 export type CreateStreamReturnType = {
   loading: boolean;
   error: Error | null;
@@ -25,10 +28,11 @@ export type CreateStreamReturnType = {
  * @param args 
  * @returns 
  */
-export const useCreateStream = (
-  contract: Sablier,
+export const useCreateStreamCall = (
+  contracAddress: string,
   args: MutationArgs
 ): CreateStreamReturnType => {
+  
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState(null);
   const [receipt, setReceipt] = useState<TransactionReceipt | null>(null);
@@ -43,6 +47,10 @@ export const useCreateStream = (
     ) => {
       setLoading(true);
       try {
+        const contract = new Sablier({
+          web3Host: chainDict[dappConfig.chainId].rpc,
+      }, contracAddress);
+      await contract.start();
         const receipt = await contract.createStream(
           recipient,
           deposit,
@@ -53,13 +61,14 @@ export const useCreateStream = (
         setReceipt(receipt);
         args.onMutate && args.onMutate(receipt);
       } catch (e: any) {
+        console.error(e);
         args.onError && args.onError(e);
         setError(e);
       } finally {
         setLoading(false);
       }
     },
-    [contract, args]
+    [contracAddress]
   );
 
   return { loading, error, receipt, mutate };

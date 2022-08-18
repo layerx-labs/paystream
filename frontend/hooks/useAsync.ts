@@ -21,6 +21,7 @@ const useAsync = <ReturnType>(asyncFunction: ()=> Promise<ReturnType>): {
       setError(null);
       try {
         const res : ReturnType = await asyncFunction();
+        setResult(res);
       } catch (error: any) {
         setError(error);
       } finally {
@@ -32,7 +33,7 @@ const useAsync = <ReturnType>(asyncFunction: ()=> Promise<ReturnType>): {
     // in an onClick handler.
     useEffect(() => {
         execute();      
-    }, [execute]);
+    }, []);
     return { execute, loading, result, error, refetch: ()=> execute()};
   };
 
