@@ -5,7 +5,7 @@ import {
 } from "../lib/IWeb3ConnectionProxy";
 import { IWeb3ConnectionProxy } from "../lib/IWeb3ConnectionProxy";
 
-const useChainId = () => {
+const useChainId = (): number =>  {
   const proxy: IWeb3ConnectionProxy = useContext(WebConnectionCtx);
   const [chainId, setChainId] = useState(proxy.isConnected()? proxy.getChainId(): 0);
   const reactor = {

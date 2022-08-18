@@ -1,6 +1,7 @@
-import { ERC20, Web3Connection } from "@taikai/dappkit";
+import { ERC20 } from "@taikai/dappkit";
 import { useEffect, useState, useContext } from "react";
 import { WebConnectionCtx } from "../context";
+import { ConnectionEvent } from "../lib/IWeb3ConnectionProxy";
 
 export const useERC20Balance = (contractAddress: string, address: string) => {
   const [error, setError] = useState("");
@@ -8,25 +9,41 @@ export const useERC20Balance = (contractAddress: string, address: string) => {
   const [balance, setBalance] = useState(0);
   const proxy = useContext(WebConnectionCtx);
   
+  const reactor = {
+    onConnectionEvent: async (event: ConnectionEvent) => {
+      console.log("Connect event");
+     
+    },
+    onDisconnectEvent: () => {
+      console.log("Disconnect event");
+    },
+  };
+
   useEffect(() => {
-    if (!proxy.isConnected && !address && !contractAddress) {
-      setBalance(0);
-      return;
+   if ( proxy.isConnected() ) {
+     const  initiateCon = async ()=> {
+      setLoading(true);
+      const erc20 = new ERC20(proxy.getConnection(), contractAddress);
+      await erc20.loadContract();
+      try {
+        const tokenBalance = await erc20.getTokenAmount(address);
+        setBalance(tokenBalance);    
+      } catch (error: any) {
+          setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+     };
+     initiateCon();
     }
-    const erc20 = new ERC20(proxy.getConnection(), contractAddress);
-    erc20.loadContract().then(async ()=> {
-        setLoading(true);
-        try {
-            console.log("Getting Balance ", address);
-            const tokenBalance = await erc20.getTokenAmount(address);
-            setBalance(tokenBalance);    
-        } catch (error: any) {
-            setError(error.message);
-        } finally {
-          setLoading(false);
-        }
-    });
-  }, [contractAddress, loading. address]);
+  }, [])
+
+  useEffect(() => {
+    proxy.subscribe(reactor);
+    return () => {
+      proxy.unsubscribe(reactor);
+    };
+  }, []);
 
   return { error, balance };
 };

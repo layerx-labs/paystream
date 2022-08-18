@@ -7,39 +7,38 @@ import { useERC20Balance } from "../hooks/useERC20Balance";
 import { useWeb3 } from "../hooks/useWeb3";
 import { dappConfig } from "../config";
 import useSablier from "../hooks/useSablier";
-import useWeb3Mutation, { CreateStreamMethod, MapToReceipt } from "../hooks/useWeb3Mutation";
+import useWeb3Mutation, { CreateStreamMethod, MapToReceipt, Web3HookArgType, Web3HookReturnType } from "../hooks/useWeb3Mutation";
 import { Sablier } from "paystream-sdk";
 import { TransactionReceipt } from "@taikai/dappkit/dist/src/interfaces/web3-core";
+import { useEffect, useState } from "react";
+import { WebConnectionCtx } from "../context";
 
-const ShowWalletDetails = ()=> {
-  
+import { useContext } from "react";
+import { Web3Connection } from "@taikai/dappkit";
+import { useCreateStream } from "../hooks/sablier/mutations";
+
+
+
+
+const ShowWalletDetails = ()=> {  
   const { address, chainId }  = useWeb3();
   const { balance } = useBalance();
   const { balance: beproBalance } = useERC20Balance(
-    dappConfig.beproContracAddress, 
+    "0x7370B632076A6Fe704dEEe256BE1E83e9e10F5c1", 
     address
   );
+  const { contract } = useSablier(dappConfig.sablierContracAddress);
+  const { mutate } = useCreateStream(contract, {
+    onMutate: (receipt: TransactionReceipt) => {
+      console.log(receipt);
+    },
+    onError: (error: Error) => {
+      console.log(error);
+    },
+  });
 
-  const {contract} = useSablier(dappConfig.beproContracAddress)
-  const {loading, error, mutate} = useWeb3Mutation<
-    Sablier, 
-    MapToReceipt<CreateStreamMethod>, 
-    "createStream"
-  >(
-    contract, 
-    "createStream", 
-    {
-      contractAddress: dappConfig.beproContracAddress,
-      onMutate: (receipt: TransactionReceipt) => { 
-        console.log(receipt)
-      },
-      onError: ( error: Error)=> {
-        console.log(error)
-      },    
-    });
-  
-
-  return <>
+  return (
+    <>
       <GridRow>
         <GridCol>{chainId}</GridCol>
       </GridRow>
@@ -52,7 +51,29 @@ const ShowWalletDetails = ()=> {
       <GridRow>
         <GridCol>{beproBalance} BEPRO</GridCol>
       </GridRow>
+      <GridRow>
+        <GridCol>
+          <Button
+            ariaLabel="Connect Wallet"
+            className="button"
+            color="green"
+            querySelector=".button"
+            value="Create Stream"
+            variant="solid"
+            action={() => {
+              mutate(
+                "0x37ebdd9B2adC5f8af3993256859c1Ea3BFE1465e",
+                1000,
+                "0x37ebdd9B2adC5f8af3993256859c1Ea3BFE1465e",
+                1660739677,
+                1960739677
+              );
+            }}
+          />
+        </GridCol>
+      </GridRow>
     </>
+  );
 };
 
 const Home: NextPage = () => { 
