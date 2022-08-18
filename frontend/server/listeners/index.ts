@@ -65,11 +65,19 @@ export const syncWithPastEvents = async ({
       return pastEvents.length
         ? pastEvents
             .filter(event => {
-              const limInf = fromBlock + fromTxIndex;
-              const limSup = toBlock && toTxIndex && toBlock + toTxIndex;
-              const cur = event.blockNumber + event.transactionIndex;
+              const meetsLowerLimit =
+                event.blockNumber !== fromBlock ||
+                (event.blockNumber === fromBlock &&
+                  event.transactionIndex >= fromTxIndex);
 
-              return cur >= limInf && (!limSup || cur <= limSup);
+              const meetsUpperLimit =
+                event.blockNumber !== toBlock ||
+                (event.blockNumber === toBlock &&
+                  (!toTxIndex ||
+                    ((toTxIndex || toTxIndex === 0) &&
+                      event.transactionIndex <= toTxIndex)));
+
+              return meetsLowerLimit && meetsUpperLimit;
             })
             .map(event =>
               listener(null, event, {
