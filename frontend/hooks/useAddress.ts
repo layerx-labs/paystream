@@ -1,5 +1,4 @@
-import { Web3Connection } from "@taikai/dappkit";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { WebConnectionCtx } from "../context";
 import { IWeb3ConnectionProxy } from "../lib/IWeb3ConnectionProxy";
 import useAsync from "./useAsync";

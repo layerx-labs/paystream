@@ -1,8 +1,7 @@
 import { Sablier } from "paystream-sdk";
-import { useContext, useCallback } from "react";
+import { useCallback } from "react";
 import { dappConfig } from "../../config";
 import { chainDict } from "../../constants/networks";
-import { WebConnectionCtx } from "../../context";
 import useAsync from "../useAsync";
 
 /**

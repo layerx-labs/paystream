@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from "react";
-
 import { WebConnectionCtx } from "../context";
 import { IWeb3ConnectionProxy } from "../lib/IWeb3ConnectionProxy";
 
