@@ -8,10 +8,11 @@ import {
   prismaClient,
   selectParser,
 } from './prisma-orm';
+const errorHandler = new ErrorHandler().errorHandler;
 
 export const db = makeDatabaseManager({
   orm: prismaClient,
-  errorHandler: new ErrorHandler(),
+  errorHandler,
   infoToSelect,
   tagToSelect,
   selectParser,

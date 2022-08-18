@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import CustomError from '../errors/custom-error';
+import CustomError from '../../errors/custom-error';
 import {
   GeneratedCreateInputs,
   GeneratedUpdateInputs,
@@ -20,6 +20,8 @@ type Select<T = any> = {
   select: T;
 };
 
+export type Sort = Record<string, 'asc' | 'desc'>;
+
 export type ISelectionSetProps<S = any> = {
   info?: Record<string, any>;
   gql?: any;
@@ -39,13 +41,14 @@ export interface IOrmAdapterMethodsProps<
   } & ISelectionSetProps<Select>;
   findMany: {
     where: WhereInput;
-    orderBy?: Record<string, any>;
+    orderBy?: Sort;
     page?: number;
     perPage?: number;
   } & ISelectionSetProps<Select>;
   findManyPageInfo: {
     where: WhereInput;
     perPage?: number;
+    orderBy?: Sort;
   };
   find: {
     where: WhereInput;
@@ -184,7 +187,7 @@ export type DatabaseManagerProps<T> = {
   orm: T;
   makeOrmAdapter(props: OrmAdapterProps): IOrmAdapter;
   modelsNames: typeof Prisma.ModelName;
-  errorHandler: IErrorHandler;
+  errorHandler: IErrorHandler['errorHandler'];
   infoToSelect: InfoToSelect;
   tagToSelect: TagToSelect;
   selectParser: SelectParser;

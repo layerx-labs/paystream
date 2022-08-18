@@ -60,6 +60,10 @@ function generateEntities() {
   )}\n`.replace(/\"/g, '');
 }
 
+/**
+ * Generate Inputs for Prisma Models
+ * @param config
+ */
 function start(config: IConfig) {
   const header = `
 /** 
@@ -76,10 +80,17 @@ import { Prisma, ${models.join(', ')} } from '@prisma/client';\n\n`;
   const entities = generateEntities();
   const inputs = generateInputs(config);
 
-  writeFileSync(config.outputPath, `${header}${entities}${inputs}`, {
-    encoding: 'utf-8',
-  });
-  console.info('Generated inputs successfully', `see: ${config.outputPath}`);
+  writeFileSync(
+    path.resolve(config.outputPath),
+    `${header}${entities}${inputs}`,
+    {
+      encoding: 'utf-8',
+    }
+  );
+  console.info(
+    'Generated Prisma Inputs successfully',
+    `see: ${config.outputPath}`
+  );
 }
 
 start(config);
