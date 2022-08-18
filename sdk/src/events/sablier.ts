@@ -1,5 +1,3 @@
-import { EventOptions, EventData } from 'web3-eth-contract';
-
 export interface CancelStreamEvent {
   returnValues: {
     streamId: number;
@@ -60,26 +58,3 @@ export interface UpdateFeeEvent {
 export interface WithdrawFromStreamEvent {
   returnValues: { streamId: number; recipient: string; amount: number };
 }
-
-export const EventNames = {
-  CancelStream: 'CancelStream',
-  CreateCompoundingStream: 'CreateCompoundingStream',
-  CreateStream: 'CreateStream',
-  OwnershipTransferred: 'OwnershipTransferred',
-  Paused: 'Paused',
-  PauserAdded: 'PauserAdded',
-  PauserRemoved: 'PauserRemoved',
-  PayInterest: 'PayInterest',
-  TakeEarnings: 'TakeEarnings',
-  Unpaused: 'Unpaused',
-  UpdateFee: 'UpdateFee',
-  WithdrawFromStream: 'WithdrawFromStream',
-} as const;
-
-export type EventListenerCallBack = (error: Error, event: EventData) => void;
-
-export type EventListener = {
-  eventName: keyof typeof EventNames;
-  options?: EventOptions;
-  callback: EventListenerCallBack;
-};
