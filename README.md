@@ -24,6 +24,7 @@ Read through [CONTRIBUTING.md](./CONTRIBUTING.md) for a general overview of our 
 root
 ├── <a href="./frontend">Frontend App</a>
 ├── <a href="./sdk">Paystream Smart Contract SDK</a>
+</pre>
 
 ### Overview
 
