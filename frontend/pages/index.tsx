@@ -1,25 +1,25 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import styles from "../styles/Home.module.css";
-import { GridContainer, GridCol, GridRow, Button } from "@taikai/rocket-kit";
-import useBalance from "../hooks/useETHBalance";
-import useERC20Balance from "../hooks/useERC20Balance";
-import { useWeb3 } from "../hooks/useWeb3";
-import { dappConfig } from "../config";
-import useSablier from "../hooks/useSablier";
-import { TransactionReceipt } from "@taikai/dappkit/dist/src/interfaces/web3-core";
-import { useCreateStreamCall } from "../hooks/sablier/mutations";
-import useAddress from "../hooks/useAddress";
-import { useOwnerQuery } from "../hooks/sablier/queries";
-import useBlockNumber from "../hooks/useBlockNumber";
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import styles from '../styles/Home.module.css';
+import { GridContainer, GridCol, GridRow, Button } from '@taikai/rocket-kit';
+import useBalance from '../hooks/useETHBalance';
+import useERC20Balance from '../hooks/useERC20Balance';
+import { useWeb3 } from '../hooks/useWeb3';
+import { dappConfig } from '../config';
+import useSablier from '../hooks/useSablier';
+import { TransactionReceipt } from '@taikai/dappkit/dist/src/interfaces/web3-core';
+import { useCreateStreamCall } from '../hooks/sablier/mutations';
+import useAddress from '../hooks/useAddress';
+import { useOwnerQuery } from '../hooks/sablier/queries';
+import useBlockNumber from '../hooks/useBlockNumber';
 
-const ShowWalletDetails = ()=> {  
-  const { chainId }  = useWeb3();
-  const { address = "" }  = useAddress();  
+const ShowWalletDetails = () => {
+  const { chainId } = useWeb3();
+  const { address = '' } = useAddress();
   const { balance } = useBalance();
-  const { contract } = useSablier(dappConfig.sablierContracAddress);
-  const { owner } = useOwnerQuery(dappConfig.sablierContracAddress);
-  const { mutate } = useCreateStreamCall(dappConfig.sablierContracAddress, {
+  const { contract } = useSablier(dappConfig.sablierContractAddress);
+  const { owner } = useOwnerQuery(dappConfig.sablierContractAddress);
+  const { mutate } = useCreateStreamCall(dappConfig.sablierContractAddress, {
     onMutate: (receipt: TransactionReceipt) => {
       //console.log(receipt);
     },
@@ -57,9 +57,9 @@ const ShowWalletDetails = ()=> {
             variant="solid"
             action={() => {
               mutate(
-                "0x37ebdd9B2adC5f8af3993256859c1Ea3BFE1465e",
+                '0x37ebdd9B2adC5f8af3993256859c1Ea3BFE1465e',
                 1000,
-                "0x37ebdd9B2adC5f8af3993256859c1Ea3BFE1465e",
+                '0x37ebdd9B2adC5f8af3993256859c1Ea3BFE1465e',
                 Math.floor(Date.now() / 1000),
                 1960739677
               );
@@ -71,8 +71,8 @@ const ShowWalletDetails = ()=> {
   );
 };
 
-const Home: NextPage = () => { 
-  const {connected, connect, disconnect, error } = useWeb3();
+const Home: NextPage = () => {
+  const { connected, connect, disconnect, error } = useWeb3();
 
   return (
     <div className={styles.container}>
@@ -95,12 +95,12 @@ const Home: NextPage = () => {
                 querySelector=".button"
                 value="Connect Wallet"
                 variant="solid"
-                action={()=> connect()}
+                action={() => connect()}
               />
             )}
           </GridCol>
         </GridRow>
-        {connected && <ShowWalletDetails />}         
+        {connected && <ShowWalletDetails />}
         {connected && (
           <GridRow>
             <GridCol>
@@ -124,7 +124,7 @@ const Home: NextPage = () => {
               <>Error: {error}</>
             </GridCol>
           </GridRow>
-        )}       
+        )}
       </GridContainer>
     </div>
   );

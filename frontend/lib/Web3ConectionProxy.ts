@@ -1,15 +1,15 @@
-import { Web3Connection } from "@taikai/dappkit";
+import { Web3Connection } from '@taikai/dappkit';
 
-import { chainDict } from "../constants/networks";
+import { chainDict } from '../constants/networks';
 import {
   IWeb3ConnectionProxy,
   Web3ConnectionProxyEventReactor,
-} from "./IWeb3ConnectionProxy";
+} from './IWeb3ConnectionProxy';
 
 export interface Web3ConnectionOptions {
-  autonnect?: boolean;
+  autoconnect?: boolean;
   switchNetwork?: boolean;
-  addNewortk?: boolean;
+  addNetwork?: boolean;
   disconnectOnSwitchAccount?: boolean;
   disconnectOnChangeNetwork?: boolean;
 }
@@ -19,15 +19,15 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
   private _connectedChain = 0;
   private _isConnecting = false;
   private _connection: Web3Connection;
-  private _rpcHost = "http://localhost:8545";
+  private _rpcHost = 'http://localhost:8545';
   private _chainId = 1;
-  private _address = "";
+  private _address = '';
   private _reactors: Web3ConnectionProxyEventReactor[] = [];
 
   private _options: Web3ConnectionOptions = {
-    autonnect: true,
+    autoconnect: true,
     switchNetwork: true,
-    addNewortk: true,
+    addNetwork: true,
     disconnectOnSwitchAccount: false,
     disconnectOnChangeNetwork: false,
   };
@@ -50,7 +50,7 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
   }
 
   subscribe(reactor: Web3ConnectionProxyEventReactor) {
-   if (!this._reactors.includes(reactor)) {
+    if (!this._reactors.includes(reactor)) {
       this._reactors.push(reactor);
     }
   }
@@ -64,7 +64,7 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
   }
 
   onError(e: Error) {
-    this._reactors.forEach((reactor) => {
+    this._reactors.forEach(reactor => {
       if (reactor.onError) {
         reactor.onError(e);
       }
@@ -122,12 +122,12 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
   }
 
   async disconnect(): Promise<boolean> {
-    (window as any).ethereum.on("accountsChanged", () => {});
-    (window as any).ethereum.on("chainChanged", () => {});
+    (window as any).ethereum.on('accountsChanged', () => {});
+    (window as any).ethereum.on('chainChanged', () => {});
     this._connected = false;
     this._connectedChain = 0;
-    this._address = "";
-    this._reactors.forEach((reactor) => {
+    this._address = '';
+    this._reactors.forEach(reactor => {
       if (reactor.onDisconnectEvent) {
         reactor.onDisconnectEvent({});
       }
@@ -139,7 +139,7 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
     try {
       this._isConnecting = true;
       await (window as any).ethereum.request({
-        method: "wallet_switchEthereumChain",
+        method: 'wallet_switchEthereumChain',
         params: [{ chainId: this._connection.utils.numberToHex(chainId) }],
       });
       const connectedChainId = await this._connection.eth.getChainId();
@@ -152,7 +152,7 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
       }
     } catch (switchError: any) {
       if (switchError.code === 4902) {
-        if (this._options.addNewortk) {
+        if (this._options.addNetwork) {
           this.addNetwork();
         }
         this.onError(
@@ -177,7 +177,7 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
     try {
       this._isConnecting = true;
       await (window as any).ethereum.request({
-        method: "wallet_addEthereumChain",
+        method: 'wallet_addEthereumChain',
         params: [
           {
             chainId: this._connection.utils.numberToHex(this._chainId),
@@ -210,8 +210,8 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
 
   _onAccountsChanged(newAddresses: string[]) {
     const newAddress =
-      newAddresses && newAddresses.length > 0 ? newAddresses[0] : "";
-    this._reactors.forEach((reactor) => {
+      newAddresses && newAddresses.length > 0 ? newAddresses[0] : '';
+    this._reactors.forEach(reactor => {
       if (reactor.onChangeAccountEvent) {
         reactor.onChangeAccountEvent({
           address: newAddress,
@@ -229,7 +229,7 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
   }
 
   _onChainChanged(newChainId: string) {
-    this._reactors.forEach((reactor) => {
+    this._reactors.forEach(reactor => {
       if (reactor.onChangeNetworkEvent) {
         reactor.onChangeNetworkEvent({
           chainId: parseInt(newChainId),
@@ -251,14 +251,14 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
       this._connected = true;
       this._connectedChain = chainId;
       (window as any).ethereum.on(
-        "accountsChanged",
+        'accountsChanged',
         this._onAccountsChanged.bind(this)
       );
       (window as any).ethereum.on(
-        "chainChanged",
+        'chainChanged',
         this._onChainChanged.bind(this)
       );
-      this._reactors.forEach((reactor) => {
+      this._reactors.forEach(reactor => {
         if (reactor.onConnectionEvent) {
           reactor.onConnectionEvent({
             chainId: this._connectedChain,
