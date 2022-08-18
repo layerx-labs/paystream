@@ -2,7 +2,7 @@ import { ERC20 } from "@taikai/dappkit";
 import { useEffect, useState, useContext, useCallback } from "react";
 import { WebConnectionCtx } from "../context";
 
-const useERC20Balance = (contractAddress: string, address: string): {
+const useERC20Balance = (contractAddress: string, address?: string): {
   loading: boolean,
   error: string | null,
   balance: number
@@ -14,6 +14,9 @@ const useERC20Balance = (contractAddress: string, address: string): {
   const proxy = useContext(WebConnectionCtx);
 
   const execute = useCallback(async ()=> { 
+    if(!address) {
+      return;
+    }
     setLoading(true);      
     try {
       const erc20 = new ERC20(proxy.getConnection(), contractAddress);

@@ -9,9 +9,11 @@ import { dappConfig } from "../config";
 import useSablier from "../hooks/useSablier";
 import { TransactionReceipt } from "@taikai/dappkit/dist/src/interfaces/web3-core";
 import { useCreateStream } from "../hooks/sablier/mutations";
+import useAddress from "../hooks/useAddress";
 
 const ShowWalletDetails = ()=> {  
-  const { address, chainId }  = useWeb3();
+  const { chainId }  = useWeb3();
+  const { address = "" }  = useAddress();  
   const { balance } = useBalance();
   const { balance: beproBalance } = useERC20Balance(
     dappConfig.beproContracAddress, 

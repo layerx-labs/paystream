@@ -2,35 +2,23 @@ import { Web3Connection } from "@taikai/dappkit";
 import { useContext, useEffect, useState } from "react";
 import { WebConnectionCtx } from "../context";
 import { IWeb3ConnectionProxy } from "../lib/IWeb3ConnectionProxy";
+import useAsync from "./useAsync";
 
- const useAddress = (con: Web3Connection): {
+ const useAddress = (): {
   loading: boolean,
   error: string | null,
-  address: string
+  address: string| null
  } =>  {
 
-  const proxy: IWeb3ConnectionProxy = useContext(WebConnectionCtx);  
-  const [error, setError] = useState("");
-  const [address, setAddress] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const execute = async ()=> {
-    setLoading(true);      
-    try {
-      const res = await proxy.getConnection().getAddress();
-      setAddress(res);    
-    } catch (error: any) {
-        setError(error.message);
-    } finally {
-      setLoading(false);
-    }
+  const proxy: IWeb3ConnectionProxy = useContext(WebConnectionCtx);    
+  
+  const execute = async () => {
+     return proxy.getConnection().getAddress();   
   };
 
-  useEffect(()=> {
-    execute()
-  }, [])
+  const { loading , error, result }= useAsync(execute);
 
-  return {loading, address, error};
+  return {loading, address: result, error};
 };
 
 

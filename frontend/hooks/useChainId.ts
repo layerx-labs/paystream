@@ -1,35 +1,22 @@
 import { useEffect, useState, useContext } from "react";
 import { WebConnectionCtx } from "../context";
 import { IWeb3ConnectionProxy } from "../lib/IWeb3ConnectionProxy";
+import useAsync from "./useAsync";
 
 const useChainId = (): {
-  chainId: number,
-  loading: boolean,
-  error: string,
-} =>  {
+  chainId: number | null;
+  loading: boolean;
+  error: string;
+} => {
   const proxy: IWeb3ConnectionProxy = useContext(WebConnectionCtx);
-  
-  const [error, setError] = useState("");
-  const [chainId, setChainId] = useState(0);
-  const [loading, setLoading] = useState(false);
 
-  const execute = async ()=> {
-    setLoading(true);      
-    try {
-      const res = await proxy.getConnection().eth.getChainId();
-      setChainId(res);    
-    } catch (error: any) {
-        setError(error.message);
-    } finally {
-      setLoading(false);
-    }
+  const execute = async () => {
+    return proxy.getConnection().eth.getChainId();
   };
 
-  useEffect(()=> {
-    execute()
-  }, [])
+  const { loading, error, result } = useAsync(execute);
 
-  return {error, loading, chainId };
+  return { error, loading, chainId: result };
 };
 
 export default useChainId;
