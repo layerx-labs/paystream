@@ -1,0 +1,29 @@
+type WithdrawFromStream implements Node {
+  id: ID!
+  stream: Stream!
+  recipient: String!
+  amount: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Query {
+  withdrawFromStream(id: ID!): WithdrawFromStream!
+  withdrawsFromStream(
+    where: WithdrawFromStreamWhereInput
+    orderBy: WithdrawFromStreamOrderByWithRelationInput
+    page: Int
+    perPage: Int
+  ): [WithdrawFromStream!]!
+  withdrawsFromStreamPageInfo(
+    where: WithdrawFromStreamWhereInput
+    perPage: Int
+  ): PageInfo!
+}
+
+type Mutation {
+  createWithdrawFromStream(
+    data: WithdrawFromStreamCreateInput!
+  ): WithdrawFromStream!
+  deleteWithdrawFromStream(id: ID!): WithdrawFromStream!
+}
