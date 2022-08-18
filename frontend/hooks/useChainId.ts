@@ -1,30 +1,35 @@
 import { useEffect, useState, useContext } from "react";
 import { WebConnectionCtx } from "../context";
-import {
-  ConnectionEvent,
-} from "../lib/IWeb3ConnectionProxy";
 import { IWeb3ConnectionProxy } from "../lib/IWeb3ConnectionProxy";
 
-const useChainId = (): number =>  {
+const useChainId = (): {
+  chainId: number,
+  loading: boolean,
+  error: string,
+} =>  {
   const proxy: IWeb3ConnectionProxy = useContext(WebConnectionCtx);
-  const [chainId, setChainId] = useState(proxy.isConnected()? proxy.getChainId(): 0);
-  const reactor = {
-    onConnectionEvent: (event: ConnectionEvent) => {
-      setChainId(event.chainId);
-    },
-    onDisconnectEvent: () => {
-      setChainId(0);
-    },
+  
+  const [error, setError] = useState("");
+  const [chainId, setChainId] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const execute = async ()=> {
+    setLoading(true);      
+    try {
+      const res = await proxy.getConnection().eth.getChainId();
+      setChainId(res);    
+    } catch (error: any) {
+        setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => {
-    proxy.subscribe(reactor);
-    return () => {
-      proxy.unsubscribe(reactor);
-    };
-  }, []);
+  useEffect(()=> {
+    execute()
+  }, [])
 
-  return chainId;
+  return {error, loading, chainId };
 };
 
 export default useChainId;
