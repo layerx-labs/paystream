@@ -12,8 +12,10 @@ const config: HardhatUserConfig = {
       },
     },
   },
+  defaultNetwork: "local",
   networks: {
-    hardhat: {
+    local: {
+      url: 'http://localhost:8545',
     },
     moonbase: {
       url: 'https://rpc.api.moonbase.moonbeam.network',
