@@ -2,20 +2,35 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { GridContainer, GridCol, GridRow, Button } from "@taikai/rocket-kit";
-import { useBalance } from "../hooks/useBalance";
-import { useERC20Balance } from "../hooks/useERC20Balance";
+import useBalance from "../hooks/useETHBalance";
+import useERC20Balance from "../hooks/useERC20Balance";
 import { useWeb3 } from "../hooks/useWeb3";
 import { dappConfig } from "../config";
+import useSablier from "../hooks/useSablier";
+import { TransactionReceipt } from "@taikai/dappkit/dist/src/interfaces/web3-core";
+import { useCreateStreamCall } from "../hooks/sablier/mutations";
+import useAddress from "../hooks/useAddress";
+import { useOwnerQuery } from "../hooks/sablier/queries";
+import useBlockNumber from "../hooks/useBlockNumber";
 
-const ShowWalletDetails = ()=> {
-  
-  const { address, chainId }  = useWeb3();
+const ShowWalletDetails = ()=> {  
+  const { chainId }  = useWeb3();
+  const { address = "" }  = useAddress();  
   const { balance } = useBalance();
-  const { balance: beproBalance } = useERC20Balance(
-    dappConfig.beproContracAddress, 
-    address
-  );
-  return <>
+  const { contract } = useSablier(dappConfig.sablierContracAddress);
+  const { owner } = useOwnerQuery(dappConfig.sablierContracAddress);
+  const { mutate } = useCreateStreamCall(dappConfig.sablierContracAddress, {
+    onMutate: (receipt: TransactionReceipt) => {
+      //console.log(receipt);
+    },
+    onError: (error: Error) => {
+      //console.log(error);
+    },
+  });
+  const { blockNumber } = useBlockNumber();
+
+  return (
+    <>
       <GridRow>
         <GridCol>{chainId}</GridCol>
       </GridRow>
@@ -26,9 +41,34 @@ const ShowWalletDetails = ()=> {
         <GridCol>{balance} ETH</GridCol>
       </GridRow>
       <GridRow>
-        <GridCol>{beproBalance} BEPRO</GridCol>
+        <GridCol>{owner} Owner</GridCol>
+      </GridRow>
+      <GridRow>
+        <GridCol>{blockNumber} Block</GridCol>
+      </GridRow>
+      <GridRow>
+        <GridCol>
+          <Button
+            ariaLabel="Connect Wallet"
+            className="button"
+            color="green"
+            querySelector=".button"
+            value="Create Stream"
+            variant="solid"
+            action={() => {
+              mutate(
+                "0x37ebdd9B2adC5f8af3993256859c1Ea3BFE1465e",
+                1000,
+                "0x37ebdd9B2adC5f8af3993256859c1Ea3BFE1465e",
+                Math.floor(Date.now() / 1000),
+                1960739677
+              );
+            }}
+          />
+        </GridCol>
       </GridRow>
     </>
+  );
 };
 
 const Home: NextPage = () => { 

@@ -1,6 +1,6 @@
 import {Model, Web3Connection, Web3ConnectionOptions, Deployable, XEvents} from '@taikai/dappkit';
 
-import SablierJson from 'build/contracts/protocol/Sablier.sol/Sablier.json';
+import SablierJson from '../../build/contracts/protocol/Sablier.sol/Sablier.json';
 import { SablierMethods } from 'src/interfaces/sablier';
 import * as Events from 'src/events/sablier'
 import {PastEventOptions} from 'web3-eth-contract';
