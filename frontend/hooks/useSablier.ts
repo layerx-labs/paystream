@@ -24,7 +24,6 @@ const useSablier = (contractAddress: string) : {
     try {
       setLoading(true)
       await contract.start();
-      //console.log(`Loaded Sablier[${contractAddress}]`);
       setLoaded(true);
     } catch (e: any) {
       setError(e.message);

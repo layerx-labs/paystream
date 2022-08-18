@@ -10,7 +10,7 @@
     "prepublishOnly": "npm run build",
     "build": "npx tsc",
     "eslint": "eslint --ignore-path .eslintignore --ext .ts ./src",
-    "deploy:local": "npx hardhat run --network hardhat scripts/deploy.ts",
+    "deploy:local": "npx hardhat run --network local scripts/deploy.ts",
     "deploy:kovan": "npx hardhat run --network kovan scripts/deploy.ts",
     "deploy:ropsten": "npx hardhat run --network ropsten scripts/deploy.ts",
     "deploy:moonbase": "npx hardhat run --network moonbase scripts/deploy.ts",

@@ -2,6 +2,7 @@ import { HttpNetworkConfig } from 'hardhat/types'
 import { ethers } from "hardhat";
 import hre from "hardhat";
 import  { Web3Connection, ERC20 }  from "@taikai/dappkit" ;
+
 /**
  * Deploys a Bepro Token Contract and Paystream Contract
  */
@@ -17,7 +18,9 @@ async function main() {
   // Connect to the RPC Endpoint
   const web3Connection = new Web3Connection(options);
   await web3Connection.start();
-  //
+  
+  // 2. BEPRO DEPLOY
+
   console.log(`Deploying Bepro Contract...`)
   const deployer = new ERC20(web3Connection);
     // Load abi contract is only needed for deploy actions
@@ -25,12 +28,13 @@ async function main() {
   const tx = await deployer.deployJsonAbi(
     "Bepro Network", // the name of the token
     "BEPRO", // the symbol of the token
-    300000000, // capital
+    300*10**9, // capital
     "0xf15CC0ccBdDA041e2508B829541917823222F364" // the owner of the total amount of the tokens (your address)
   );
     
   console.log(`Bepro Contract Deployed at ${tx.contractAddress}`)
 
+  // 2. PAYSTREAM DEPLOY
   console.log(`Deploying Paystream Contract...`)
 
   const Sablier = await ethers.getContractFactory("Sablier");

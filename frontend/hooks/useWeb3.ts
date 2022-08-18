@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 
 import { WebConnectionCtx } from "../context";
-import { IWeb3ConnectionProxy, ChangeNetworkEvent, ChangeAccountEvent} from "../lib/IWeb3ConnectionProxy";
+import { IWeb3ConnectionProxy } from "../lib/IWeb3ConnectionProxy";
 
 export const useWeb3 = () => {
   const proxy: IWeb3ConnectionProxy = useContext(WebConnectionCtx);
