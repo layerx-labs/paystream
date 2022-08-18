@@ -20,10 +20,3 @@ type Query {
     perPage: Int
   ): PageInfo!
 }
-
-type Mutation {
-  createWithdrawFromStream(
-    data: WithdrawFromStreamCreateInput!
-  ): WithdrawFromStream!
-  deleteWithdrawFromStream(id: ID!): WithdrawFromStream!
-}
