@@ -3,22 +3,22 @@ import { WebConnectionCtx } from "../context";
 import { IWeb3ConnectionProxy } from "../lib/IWeb3ConnectionProxy";
 import useAsync from "./useAsync";
 
- const useAddress = (): {
+ const useBlockNumber= (): {
   loading: boolean,
   error: string | null,
-  address: string| null
+  blockNumber: number| null
  } =>  {
 
   const proxy: IWeb3ConnectionProxy = useContext(WebConnectionCtx);    
   
   const execute = async () => {
-     return proxy.getConnection().getAddress();   
+     return proxy.getConnection().eth.getBlockNumber();
   };
 
   const { loading , error, result }= useAsync(execute);
 
-  return {loading, address: result, error};
+  return {loading, blockNumber: result, error};
 };
 
 
-export default useAddress;
+export default useBlockNumber;

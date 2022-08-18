@@ -50,7 +50,7 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
   }
 
   subscribe(reactor: Web3ConnectionProxyEventReactor) {
-    if (!this._reactors.includes(reactor)) {
+   if (!this._reactors.includes(reactor)) {
       this._reactors.push(reactor);
     }
   }
