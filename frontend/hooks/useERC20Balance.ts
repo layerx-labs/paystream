@@ -8,14 +8,14 @@ export const useERC20Balance = (contractAddress: string, address: string) => {
   const [loading, setLoading] = useState(false);
   const [balance, setBalance] = useState(0);
   const proxy = useContext(WebConnectionCtx);
-  
+
   const reactor = {
     onConnectionEvent: async (event: ConnectionEvent) => {
-      console.log("Connect event");
+      //console.log("Connect event");
      
     },
     onDisconnectEvent: () => {
-      console.log("Disconnect event");
+      //console.log("Disconnect event");
     },
   };
 

@@ -7,33 +7,23 @@ import { useERC20Balance } from "../hooks/useERC20Balance";
 import { useWeb3 } from "../hooks/useWeb3";
 import { dappConfig } from "../config";
 import useSablier from "../hooks/useSablier";
-import useWeb3Mutation, { CreateStreamMethod, MapToReceipt, Web3HookArgType, Web3HookReturnType } from "../hooks/useWeb3Mutation";
-import { Sablier } from "paystream-sdk";
 import { TransactionReceipt } from "@taikai/dappkit/dist/src/interfaces/web3-core";
-import { useEffect, useState } from "react";
-import { WebConnectionCtx } from "../context";
-
-import { useContext } from "react";
-import { Web3Connection } from "@taikai/dappkit";
 import { useCreateStream } from "../hooks/sablier/mutations";
-
-
-
 
 const ShowWalletDetails = ()=> {  
   const { address, chainId }  = useWeb3();
   const { balance } = useBalance();
   const { balance: beproBalance } = useERC20Balance(
-    "0x7370B632076A6Fe704dEEe256BE1E83e9e10F5c1", 
+    dappConfig.beproContracAddress, 
     address
   );
   const { contract } = useSablier(dappConfig.sablierContracAddress);
   const { mutate } = useCreateStream(contract, {
     onMutate: (receipt: TransactionReceipt) => {
-      console.log(receipt);
+      //console.log(receipt);
     },
     onError: (error: Error) => {
-      console.log(error);
+      //console.log(error);
     },
   });
 

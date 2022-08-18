@@ -40,7 +40,6 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
     this._options = _options;
     this._chainId = chainId;
     this._rpcHost = rpcHost;
-    console.log(this._rpcHost);
     this._connection = new Web3Connection({
       web3Host: this._rpcHost,
     });
@@ -260,7 +259,6 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
         this._onChainChanged.bind(this)
       );
       this._reactors.forEach((reactor) => {
-        console.log(reactor);
         if (reactor.onConnectionEvent) {
           reactor.onConnectionEvent({
             chainId: this._connectedChain,
