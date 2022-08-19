@@ -1,6 +1,5 @@
 # PayStream Monorepo
 
-
 ## TL;DR
 
 This is where [Paystream](https://paystream.io) gets built.
