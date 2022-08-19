@@ -1,6 +1,7 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import 'dotenv/config';
+import TESTING_ACCOUNTS from "./data/accounts-testing"
 
 const config: HardhatUserConfig = {
   solidity:  {
@@ -16,6 +17,7 @@ const config: HardhatUserConfig = {
   networks: {
     local: {
       url: 'http://localhost:8545',
+      accounts: [...TESTING_ACCOUNTS],
     },
     moonbase: {
       url: 'https://rpc.api.moonbase.moonbeam.network',
@@ -34,15 +36,19 @@ const config: HardhatUserConfig = {
     },
     seneca: {
       url: 'https://eth-seneca.taikai.network:8080',
+      accounts: [...TESTING_ACCOUNTS],
     },
     afrodite: {
       url: 'https://eth-afrodite.taikai.network:8080',
+      accounts: [...TESTING_ACCOUNTS],
     },
     irene: {
       url: 'https://eth-irene.taikai.network:8080',
+      accounts: [...TESTING_ACCOUNTS],
     },
     iris: {
       url: 'https://eth-iris.taikai.network:8080',
+      accounts: [...TESTING_ACCOUNTS],
     }
   },
   paths: {
