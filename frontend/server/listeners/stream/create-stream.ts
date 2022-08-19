@@ -24,7 +24,10 @@ export const createStreamListener: EventListenerCallBack = async (
     });
 
     await db.transactionBlockStatus.upsert({
-      where: {},
+      where: {
+        blockNumber: { lte: event.blockNumber },
+        txIndex: { lt: event.transactionIndex },
+      },
       create: {
         blockNumber: event.blockNumber,
         txIndex: event.transactionIndex,

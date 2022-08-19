@@ -20,7 +20,7 @@ type Select<T = any> = {
   select: T;
 };
 
-export type Sort = Record<string, 'asc' | 'desc'>;
+export type Sort<T> = Record<keyof T, 'asc' | 'desc'>;
 
 export type ISelectionSetProps<S = any> = {
   info?: Record<string, any>;
@@ -41,14 +41,14 @@ export interface IOrmAdapterMethodsProps<
   } & ISelectionSetProps<Select>;
   findMany: {
     where: WhereInput;
-    orderBy?: Sort;
+    orderBy?: Partial<Sort<Omit<WhereInput, 'AND' | 'OR' | 'NOT'>>>;
     page?: number;
     perPage?: number;
   } & ISelectionSetProps<Select>;
   findManyPageInfo: {
     where: WhereInput;
     perPage?: number;
-    orderBy?: Sort;
+    orderBy?: Partial<Sort<Omit<WhereInput, 'AND' | 'OR' | 'NOT'>>>;
   };
   find: {
     where: WhereInput;

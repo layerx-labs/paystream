@@ -98,6 +98,10 @@ export const listenersInit = async () => {
 
   const [transactionBlockStatus] = await db.transactionBlockStatus.findMany({
     where: {},
+    orderBy: {
+      blockNumber: 'desc',
+      txIndex: 'desc',
+    },
   });
   const { blockNumber, txIndex, createdAt, updatedAt } =
     transactionBlockStatus ?? {
