@@ -13,12 +13,14 @@ async function main() {
     web3Host: networkConfg.url,
     skipWindowAssignment: true
   };
-
-  console.log("Deploying to ",hre.network.name );
+  const accounts = await hre.ethers.getSigners();
+  console.log("Deploying to ", hre.network.name, " with ", accounts[0].address);
   // Connect to the RPC Endpoint
   const web3Connection = new Web3Connection(options);
   await web3Connection.start();
-  
+
+
+
   // 2. BEPRO DEPLOY
 
   console.log(`Deploying Bepro Contract...`)
