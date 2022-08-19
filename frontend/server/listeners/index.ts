@@ -96,18 +96,21 @@ export const listenersInit = async () => {
    * from the App Database before starting the listeners
    */
 
-  const [transactionBlockStatus] = await db.transactionBlockStatus.findMany({
+  const transactionBlockStatuses = await db.transactionBlockStatus.findMany({
     where: {},
     orderBy: {
       blockNumber: 'desc',
-      txIndex: 'desc',
     },
   });
-  const { blockNumber, txIndex, createdAt, updatedAt } =
-    transactionBlockStatus ?? {
-      blockNumber: 0,
-      txIndex: 0,
-    };
+
+  const lastBlock = transactionBlockStatuses.sort(
+    (a, b) => b.txIndex - a.txIndex
+  )[0];
+
+  const { blockNumber, txIndex, createdAt, updatedAt } = lastBlock ?? {
+    blockNumber: 0,
+    txIndex: 0,
+  };
 
   const sablier = await startContract();
 

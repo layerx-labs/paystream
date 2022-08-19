@@ -1,4 +1,4 @@
-import { CreateStreamEvent } from 'paystream-sdk/src';
+import { CreateStreamEvent } from 'paystream-sdk';
 import { db } from '../../services/database';
 import { scribal } from '../../services/logger';
 import { EventListenerCallBack } from '../listeners-type';
