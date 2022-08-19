@@ -1,5 +1,5 @@
-import { EventListenerCallBack } from 'paystream-sdk/src';
 import { scribal } from '../../services/logger';
+import { EventListenerCallBack } from '../listeners-type';
 
 export const withdrawFromStreamListener: EventListenerCallBack = async (
   error,
