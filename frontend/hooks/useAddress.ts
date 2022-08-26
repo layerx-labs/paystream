@@ -1,24 +1,21 @@
 import { useContext } from "react";
 import { DappkitProviderCtx } from "../context";
-import { IDappkitReactProvider } from "../lib/IDappkitReactProvider";
 import useAsync from "./useAsync";
 
- const useAddress = (): {
-  loading: boolean,
-  error: string | null,
-  address: string| null
- } =>  {
+const useAddress = (): {
+  loading: boolean;
+  error: string | null;
+  address: string | null;
+} => {
+  const dappkitProvider = useContext(DappkitProviderCtx);
 
-  const dappkitProvider: IDappkitReactProvider = useContext(DappkitProviderCtx);    
-  
   const execute = async () => {
-     return dappkitProvider.getAddress();   
+    return dappkitProvider.getAddress();
   };
 
-  const { loading , error, result } = useAsync(execute);
+  const { loading, error, result } = useAsync(execute);
 
-  return {loading, address: result, error};
+  return { loading, address: result, error };
 };
-
 
 export default useAddress;

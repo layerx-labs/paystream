@@ -1,6 +1,5 @@
-import { useEffect, useState, useContext } from "react";
+import { useContext } from "react";
 import { DappkitProviderCtx } from "../context";
-import { IDappkitReactProvider } from "../lib/IDappkitReactProvider";
 import useAsync from "./useAsync";
 
 const useChainId = (): {
@@ -8,7 +7,7 @@ const useChainId = (): {
   loading: boolean;
   error: string;
 } => {
-  const dappkitProvider: IDappkitReactProvider = useContext(DappkitProviderCtx);
+  const dappkitProvider = useContext(DappkitProviderCtx);
 
   const execute = async () => {
     return dappkitProvider.getConnection().eth.getChainId();

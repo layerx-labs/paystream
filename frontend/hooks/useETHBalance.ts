@@ -1,41 +1,29 @@
-import { useEffect, useState, useContext, useCallback } from "react";
+import { useContext, useCallback } from "react";
 import { DappkitProviderCtx } from "../context";
+import useAsync from "./useAsync";
+import { fromWei } from "web3-utils";
 
 /**
  * Get Ethereum Balance
  * @returns
  */
-const useETHBalance = () : {
-  loading: boolean,
-  error: string | null,
-  balance: string
+const useETHBalance = (): {
+  loading: boolean;
+  error: string | null;
+  balance: string;
 } => {
-
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [balance, setBalance] = useState("");
-
   const proxy = useContext(DappkitProviderCtx);
 
   // Execute Async Call
-  const execute = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await proxy.getConnection().getBalance();
-      const weiBalance = proxy.getConnection().utils.fromWei(res);
-      setBalance(weiBalance);
-    } catch (error: any) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
+  const executeFunc = useCallback(async () => {
+    return proxy.getConnection().getBalance();
   }, []);
 
-  useEffect(() => {
-    execute();
-  }, []);
+  const { loading, error, result } = useAsync(executeFunc, true);
+  // Numeric Conversion
+  const weiBalance = result ? fromWei(result) : "";
 
-  return { error, loading, balance };
+  return { error, loading, balance: weiBalance };
 };
 
 export default useETHBalance;
