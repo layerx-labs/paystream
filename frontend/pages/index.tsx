@@ -21,20 +21,6 @@ const ShowWalletDetails = ()=> {
   const { balance } = useBalance();
   const { contract } = useSablier(dappConfig.sablierContracAddress);
   const { owner } = useOwnerQuery(dappConfig.sablierContracAddress);
-  const { mutate } = useCallSablier(
-    dappConfig.sablierContracAddress, 
-    "createStream", {
-    onTransactionReceipt: (receipt: TransactionReceipt) => {
-      console.log(receipt);
-    },
-    onError: (error: Error) => {
-      console.log(error);
-    },
-  });
-  const { blockNumber } = useBlockNumber();
-  const blockStart = Math.floor(Date.now() / 1000)+3600;
-  const amount = 100;
-  const blockEnd = blockStart + amount;
 
   return (
     <>
@@ -55,23 +41,7 @@ const ShowWalletDetails = ()=> {
       </GridRow>
       <GridRow>
         <GridCol>
-          <Button
-            ariaLabel="Connect Wallet"
-            className="button"
-            color="green"
-            querySelector=".button"
-            value="Create Stream"
-            variant="solid"
-            action={() => {
-              mutate(
-                "0x508893f4E26412fe4Bbeb4895335882b655Bcf65",
-                web3.utils.toWei(amount.toString()) as any as number,
-                dappConfig.beproContracAddress,
-                blockStart ,
-                blockEnd 
-              );    
-            }}
-          />
+          123
         </GridCol>
       </GridRow>
     </>

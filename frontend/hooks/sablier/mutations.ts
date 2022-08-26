@@ -6,12 +6,32 @@ import { chainDict } from "../../constants/networks";
 import { ContractSendMethod } from "web3-eth-contract";
 
 /**
+ * Usage: 
  * 
- * Usage:
+ * useCallSablier is a generic function to run a mutation function
+ *
+ * const { mutate } = useCallSablier(
+ *   dappConfig.sablierContracAddress, 
+ *   "createStream", {
+ *   onTransactionReceipt: (receipt: TransactionReceipt) => {
+ *     console.log(receipt);
+ *   },
+ *   onError: (error: Error) => {
+ *     console.log(error);
+ *   },
+ * });
  * 
- * 
- * 
+ * ...
+ *   mutate(
+ *     "0x508893f4E26412fe4Bbeb4895335882b655Bcf65",
+ *     web3.utils.toWei(amount.toString()) as any as number,
+ *     dappConfig.beproContracAddress,
+ *     blockStart ,
+ *     blockEnd 
+ *   );    
+ * ...
  */
+
 export type MutationArgs = {
   onTransactionHash?: (hash: string) => void;
   onTransactionSent?: (payload: object) => void;
