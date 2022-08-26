@@ -4,6 +4,8 @@ import { dappConfig } from "../../config";
 import { chainDict } from "../../constants/networks";
 import useAsync from "../useAsync";
 
+
+export type SablierQueries = "owner";
 /**
  * Get the Paystream Contract Owner 
  * @param contract 

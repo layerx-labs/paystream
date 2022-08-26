@@ -2,11 +2,11 @@ import { Web3Connection } from "@taikai/dappkit";
 
 import { chainDict } from "../constants/networks";
 import {
-  IWeb3ConnectionProxy,
-  Web3ConnectionProxyEventReactor,
-} from "./IWeb3ConnectionProxy";
+  IDappkitReactProvider,
+  DappkitReactProviderEventReactor,
+} from "./IDappkitReactProvider";
 
-export interface Web3ConnectionOptions {
+export interface DappkitReactProviderOptions {
   autonnect?: boolean;
   switchNetwork?: boolean;
   addNewortk?: boolean;
@@ -14,7 +14,7 @@ export interface Web3ConnectionOptions {
   disconnectOnChangeNetwork?: boolean;
 }
 
-class Web3ConnectionProxy implements IWeb3ConnectionProxy {
+class DappkitReactProvider implements IDappkitReactProvider {
   private _connected = false;
   private _connectedChain = 0;
   private _isConnecting = false;
@@ -22,9 +22,9 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
   private _rpcHost = "http://localhost:8545";
   private _chainId = 1;
   private _address = "";
-  private _reactors: Web3ConnectionProxyEventReactor[] = [];
+  private _reactors: DappkitReactProviderEventReactor[] = [];
 
-  private _options: Web3ConnectionOptions = {
+  private _options: DappkitReactProviderOptions = {
     autonnect: true,
     switchNetwork: true,
     addNewortk: true,
@@ -35,7 +35,7 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
   constructor(
     chainId: number,
     rpcHost: string,
-    _options: Web3ConnectionOptions
+    _options: DappkitReactProviderOptions
   ) {
     this._options = _options;
     this._chainId = chainId;
@@ -49,12 +49,12 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
     return this._connection;
   }
 
-  subscribe(reactor: Web3ConnectionProxyEventReactor) {
+  subscribe(reactor: DappkitReactProviderEventReactor) {
    if (!this._reactors.includes(reactor)) {
       this._reactors.push(reactor);
     }
   }
-  unsubscribe(reactor: Web3ConnectionProxyEventReactor) {
+  unsubscribe(reactor: DappkitReactProviderEventReactor) {
     if (this._reactors.includes(reactor)) {
       var index = this._reactors.indexOf(reactor);
       if (index !== -1) {
@@ -271,4 +271,4 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
   }
 }
 
-export default Web3ConnectionProxy;
+export default DappkitReactProvider;

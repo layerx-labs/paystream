@@ -5,7 +5,13 @@ import { dappConfig } from "../../config";
 import { chainDict } from "../../constants/networks";
 import { ContractSendMethod } from "web3-eth-contract";
 
-
+/**
+ * 
+ * Usage:
+ * 
+ * 
+ * 
+ */
 export type MutationArgs = {
   onTransactionHash?: (hash: string) => void;
   onTransactionSent?: (payload: object) => void;
@@ -13,7 +19,7 @@ export type MutationArgs = {
   onError?: (error: Error) => void;
 };
 
-export type CreateStreamCallArgType = Parameters<SablierMethods["createStream"]>;
+export type SablierMutations = "createStream" | "pause" | "unpause" | "withdrawFromStream" | "cancelStream" | "updateFee" | "takeEarnings" | "createCompoundingStream";
 
 export type MutateReturnType<MutateArgsType extends any[]> = {
   loading: boolean;
