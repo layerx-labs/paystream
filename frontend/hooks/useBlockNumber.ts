@@ -9,10 +9,10 @@ import useAsync from "./useAsync";
   blockNumber: number| null
  } =>  {
 
-  const proxy: IDappkitReactProvider = useContext(DappkitProviderCtx);    
+  const dappkitProvider: IDappkitReactProvider = useContext(DappkitProviderCtx);    
   
   const execute = async () => {
-     return proxy.getConnection().eth.getBlockNumber();
+     return dappkitProvider.getConnection().eth.getBlockNumber();
   };
 
   const { loading , error, result }= useAsync(execute);

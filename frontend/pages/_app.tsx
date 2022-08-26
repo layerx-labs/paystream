@@ -1,14 +1,14 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import React from 'react';
-import {WebConnectionCtx, defaulProxy} from '../context';
+import {DappkitProviderCtx, defaulDappkitProvider} from '../context';
 
 function MyApp({ Component, pageProps }: AppProps) {
  
   return (
-    <WebConnectionCtx.Provider value={defaulProxy}>
+    <DappkitProviderCtx.Provider value={defaulDappkitProvider}>
         <Component {...pageProps} />
-    </WebConnectionCtx.Provider>
+    </DappkitProviderCtx.Provider>
   );
 }
 

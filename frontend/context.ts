@@ -4,7 +4,7 @@ import React from 'react';
 import { chainDict } from "./constants/networks";
 import { dappConfig } from "./config";
 
-export const defaulProxy = new DappkitReactProvider(
+export const defaulDappkitProvider = new DappkitReactProvider(
     dappConfig.chainId,
     chainDict[dappConfig.chainId].rpc,
     {
@@ -16,5 +16,5 @@ export const defaulProxy = new DappkitReactProvider(
     }
 )
 
-export const DappkitProviderCtx = React.createContext(defaulProxy);
+export const DappkitProviderCtx = React.createContext(defaulDappkitProvider);
 

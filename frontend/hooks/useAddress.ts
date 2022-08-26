@@ -9,10 +9,10 @@ import useAsync from "./useAsync";
   address: string| null
  } =>  {
 
-  const proxy: IDappkitReactProvider = useContext(DappkitProviderCtx);    
+  const dappkitProvider: IDappkitReactProvider = useContext(DappkitProviderCtx);    
   
   const execute = async () => {
-     return proxy.getConnection().getAddress();   
+     return dappkitProvider.getConnection().getAddress();   
   };
 
   const { loading , error, result }= useAsync(execute);
