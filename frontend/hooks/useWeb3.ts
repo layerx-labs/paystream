@@ -1,9 +1,9 @@
 import { useEffect, useState, useContext } from "react";
 import { WebConnectionCtx } from "../context";
-import { IWeb3ConnectionProxy } from "../lib/IWeb3ConnectionProxy";
+import { IDappkitReactProvider } from "../lib/IDappkitReactProvider";
 
 export const useWeb3 = () => {
-  const proxy: IWeb3ConnectionProxy = useContext(WebConnectionCtx);
+  const proxy: IDappkitReactProvider = useContext(WebConnectionCtx);
   const [connected, setConnected] = useState(proxy.isConnected());
   const address = proxy.getAddress();
   const chainId = proxy.getChainId();

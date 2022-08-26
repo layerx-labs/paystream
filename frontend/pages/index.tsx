@@ -3,12 +3,8 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { GridContainer, GridCol, GridRow, Button } from "@taikai/rocket-kit";
 import useBalance from "../hooks/useETHBalance";
-import useERC20Balance from "../hooks/useERC20Balance";
 import { useWeb3 } from "../hooks/useWeb3";
 import { dappConfig } from "../config";
-import useSablier from "../hooks/useSablier";
-import { TransactionReceipt } from "@taikai/dappkit/dist/src/interfaces/web3-core";
-import { useCallSablier } from "../hooks/sablier/mutations";
 import useAddress from "../hooks/useAddress";
 import { useOwnerQuery } from "../hooks/sablier/queries";
 import useBlockNumber from "../hooks/useBlockNumber";
@@ -19,9 +15,8 @@ const ShowWalletDetails = ()=> {
   const { chainId }  = useWeb3();
   const { address = "" }  = useAddress();  
   const { balance } = useBalance();
-  const { contract } = useSablier(dappConfig.sablierContracAddress);
   const { owner } = useOwnerQuery(dappConfig.sablierContracAddress);
-
+  const {blockNumber } = useBlockNumber();
   return (
     <>
       <GridRow>
@@ -34,7 +29,7 @@ const ShowWalletDetails = ()=> {
         <GridCol>{balance} ETH</GridCol>
       </GridRow>
       <GridRow>
-        <GridCol>{owner} Owner</GridCol>
+        <GridCol>{owner} is the Owner</GridCol>
       </GridRow>
       <GridRow>
         <GridCol>{blockNumber} Block</GridCol>

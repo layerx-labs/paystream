@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { WebConnectionCtx } from "../context";
-import { IWeb3ConnectionProxy } from "../lib/IWeb3ConnectionProxy";
+import { IDappkitReactProvider } from "../lib/IDappkitReactProvider";
 import useAsync from "./useAsync";
 
 const useChainId = (): {
@@ -8,7 +8,7 @@ const useChainId = (): {
   loading: boolean;
   error: string;
 } => {
-  const proxy: IWeb3ConnectionProxy = useContext(WebConnectionCtx);
+  const proxy: IDappkitReactProvider = useContext(WebConnectionCtx);
 
   const execute = async () => {
     return proxy.getConnection().eth.getChainId();

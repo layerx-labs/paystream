@@ -1,10 +1,10 @@
-import Web3ConnectionProxy from "./lib/Web3ConectionProxy";
+import DappkitReactProvider from "./lib/DappkitReactProvider";
 import React from 'react';
 
 import { chainDict } from "./constants/networks";
 import { dappConfig } from "./config";
 
-export const defaulProxy = new Web3ConnectionProxy(
+export const defaulProxy = new DappkitReactProvider(
     dappConfig.chainId,
     chainDict[dappConfig.chainId].rpc,
     {
