@@ -8,10 +8,12 @@ import { useWeb3 } from "../hooks/useWeb3";
 import { dappConfig } from "../config";
 import useSablier from "../hooks/useSablier";
 import { TransactionReceipt } from "@taikai/dappkit/dist/src/interfaces/web3-core";
-import { useCreateStreamCall } from "../hooks/sablier/mutations";
+import { useCallSablier } from "../hooks/sablier/mutations";
 import useAddress from "../hooks/useAddress";
 import { useOwnerQuery } from "../hooks/sablier/queries";
 import useBlockNumber from "../hooks/useBlockNumber";
+
+
 
 const ShowWalletDetails = ()=> {  
   const { chainId }  = useWeb3();
@@ -19,15 +21,20 @@ const ShowWalletDetails = ()=> {
   const { balance } = useBalance();
   const { contract } = useSablier(dappConfig.sablierContracAddress);
   const { owner } = useOwnerQuery(dappConfig.sablierContracAddress);
-  const { mutate } = useCreateStreamCall(dappConfig.sablierContracAddress, {
-    onMutate: (receipt: TransactionReceipt) => {
-      //console.log(receipt);
+  const { mutate } = useCallSablier(
+    dappConfig.sablierContracAddress, 
+    "createStream", {
+    onTransactionReceipt: (receipt: TransactionReceipt) => {
+      console.log(receipt);
     },
     onError: (error: Error) => {
-      //console.log(error);
+      console.log(error);
     },
   });
   const { blockNumber } = useBlockNumber();
+  const blockStart = `${Math.floor(Date.now() / 1000)}` as any as number;
+  const amount = "10000000" as any as number;;
+  const blockEnd = `${blockStart+amount}` as any as number;
 
   return (
     <>
@@ -58,11 +65,12 @@ const ShowWalletDetails = ()=> {
             action={() => {
               mutate(
                 "0x37ebdd9B2adC5f8af3993256859c1Ea3BFE1465e",
-                1000,
-                "0x37ebdd9B2adC5f8af3993256859c1Ea3BFE1465e",
-                Math.floor(Date.now() / 1000),
-                1960739677
+                amount,
+                "0x5Ac32814f9EB4d415779892890a216b244FcB3B5",
+                blockStart,
+                blockEnd
               );
+              //mutate(10)          
             }}
           />
         </GridCol>

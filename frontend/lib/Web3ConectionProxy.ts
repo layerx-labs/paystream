@@ -93,6 +93,7 @@ class Web3ConnectionProxy implements IWeb3ConnectionProxy {
   async connect(): Promise<boolean> {
     this._isConnecting = true;
     try {
+      await this._connection.start();
       // 1. Tries to connect
       const res = await this._connection.connect();
       // 2. Verify if you are connected to right network p.ex based on Network Id
