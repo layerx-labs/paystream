@@ -34,7 +34,7 @@
     "hardhat": "^2.10.1"
   },
   "devDependencies": {
-    "@taikai/dappkit-launchpad": "0.0.15",
+    "@taikai/dappkit-launchpad": "0.0.16",
     "@ethersproject/abi": "^5.6.4",
     "@ethersproject/providers": "^5.6.8",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.2",
