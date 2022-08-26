@@ -30,12 +30,13 @@ async function main() {
   const tx = await deployer.deployJsonAbi(
     "Bepro Network", // the name of the token
     "BEPRO", // the symbol of the token
-    300*10**9, // capital
+    "300000000000000000000000000" as any as number, // capital
     "0xf15CC0ccBdDA041e2508B829541917823222F364" // the owner of the total amount of the tokens (your address)
   );
     
   console.log(`Bepro Contract Deployed at ${tx.contractAddress}`)
-
+  const bepro = new ERC20(web3Connection, tx.contractAddress);
+  await bepro.start();
   // 2. PAYSTREAM DEPLOY
   console.log(`Deploying Paystream Contract...`)
 
@@ -43,6 +44,8 @@ async function main() {
   const sablier = await Sablier.deploy();  
   await sablier.deployed();
   console.log("Paystream Contract Deployed at ", sablier.address);
+  // Approve the Sablier contract to move deployers funds
+  await bepro.approve(sablier.address, "300000000000000000000000000" as any as number);
   
   return sablier.address;
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext, useCallback } from "react";
-import { WebConnectionCtx } from "../context";
+import { DappkitProviderCtx } from "../context";
 
 /**
  * Get Ethereum Balance
@@ -15,7 +15,7 @@ const useETHBalance = () : {
   const [loading, setLoading] = useState(false);
   const [balance, setBalance] = useState("");
 
-  const proxy = useContext(WebConnectionCtx);
+  const proxy = useContext(DappkitProviderCtx);
 
   // Execute Async Call
   const execute = useCallback(async () => {

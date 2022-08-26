@@ -1,6 +1,6 @@
 import { Web3Connection } from "@taikai/dappkit";
 
-export type Web3ConnectionProxyEvent = ConnectionEvent & DisconnectEvent & ChangeNetworkEvent & ChangeAccountEvent;
+export type DappkitReactProviderEvent = ConnectionEvent & DisconnectEvent & ChangeNetworkEvent & ChangeAccountEvent;
 
 export type ConnectionEvent = {
     chainId: number;
@@ -16,7 +16,7 @@ export type ChangeAccountEvent = {
     address: string;
 }
 
-export interface Web3ConnectionProxyEventReactor {
+export interface DappkitReactProviderEventReactor {
     onConnectionEvent?(event: ConnectionEvent): void;
     onDisconnectEvent?(event: DisconnectEvent): void;
     onChangeNetworkEvent?(event: ChangeNetworkEvent): void;
@@ -24,7 +24,7 @@ export interface Web3ConnectionProxyEventReactor {
     onError?(e: Error): void;
 }
 
-export interface IWeb3ConnectionProxy {
+export interface IDappkitReactProvider {
     connect(): Promise<boolean>;
     disconnect(): void;
     isConnected(): boolean;
@@ -34,7 +34,7 @@ export interface IWeb3ConnectionProxy {
     addNetwork(chainId: number): Promise<boolean>;
     switchNetwork(chainId: number): Promise<boolean>;
     onError(e: Error): void;
-    subscribe(subscriber: Web3ConnectionProxyEventReactor): void;
-    unsubscribe(subscriber: Web3ConnectionProxyEventReactor ): void;
+    subscribe(subscriber: DappkitReactProviderEventReactor): void;
+    unsubscribe(subscriber: DappkitReactProviderEventReactor ): void;
     getConnection(): Web3Connection;
 }

@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { WebConnectionCtx } from "../context";
-import { IWeb3ConnectionProxy } from "../lib/IWeb3ConnectionProxy";
+import { DappkitProviderCtx } from "../context";
+import { IDappkitReactProvider } from "../lib/IDappkitReactProvider";
 import useAsync from "./useAsync";
 
  const useAddress = (): {
@@ -9,10 +9,10 @@ import useAsync from "./useAsync";
   address: string| null
  } =>  {
 
-  const proxy: IWeb3ConnectionProxy = useContext(WebConnectionCtx);    
+  const dappkitProvider: IDappkitReactProvider = useContext(DappkitProviderCtx);    
   
   const execute = async () => {
-     return proxy.getConnection().getAddress();   
+     return dappkitProvider.getConnection().getAddress();   
   };
 
   const { loading , error, result }= useAsync(execute);

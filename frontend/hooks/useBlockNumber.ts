@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { WebConnectionCtx } from "../context";
-import { IWeb3ConnectionProxy } from "../lib/IWeb3ConnectionProxy";
+import { DappkitProviderCtx } from "../context";
+import { IDappkitReactProvider } from "../lib/IDappkitReactProvider";
 import useAsync from "./useAsync";
 
  const useBlockNumber= (): {
@@ -9,10 +9,10 @@ import useAsync from "./useAsync";
   blockNumber: number| null
  } =>  {
 
-  const proxy: IWeb3ConnectionProxy = useContext(WebConnectionCtx);    
+  const dappkitProvider: IDappkitReactProvider = useContext(DappkitProviderCtx);    
   
   const execute = async () => {
-     return proxy.getConnection().eth.getBlockNumber();
+     return dappkitProvider.getConnection().eth.getBlockNumber();
   };
 
   const { loading , error, result }= useAsync(execute);
