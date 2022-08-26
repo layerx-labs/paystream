@@ -1,7 +1,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 
-const useAsync = <ReturnType>(asyncFunction: ()=> Promise<ReturnType>): {
+const useAsync = <ReturnType>(asyncFunction: ()=> Promise<ReturnType>, imediate = true): {
     execute: ()=> void 
     loading: boolean, 
     result: ReturnType| null, 
@@ -32,8 +32,10 @@ const useAsync = <ReturnType>(asyncFunction: ()=> Promise<ReturnType>): {
     // Otherwise execute can be called later, such as
     // in an onClick handler.
     useEffect(() => {
+      if(imediate) {
         execute();      
-    }, []);
+      }        
+    }, [imediate]);
     return { execute, loading, result, error, refetch: ()=> execute()};
   };
 

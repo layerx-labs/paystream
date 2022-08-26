@@ -7,16 +7,14 @@ import { useWeb3 } from "../hooks/useWeb3";
 import { dappConfig } from "../config";
 import useAddress from "../hooks/useAddress";
 import { useOwnerQuery } from "../hooks/sablier/queries";
-import useBlockNumber from "../hooks/useBlockNumber";
-
-import web3 from "web3";
+import useERC20TokenAllowance from "../hooks/useERC20TokenAllowance";
 
 const ShowWalletDetails = ()=> {  
-  const { chainId }  = useWeb3();
-  const { address = "" }  = useAddress();  
+  const { chainId  }  = useWeb3();
+  const { address= "" }  = useAddress();  
   const { balance } = useBalance();
   const { owner } = useOwnerQuery(dappConfig.sablierContracAddress);
-  const {blockNumber } = useBlockNumber();
+  const { allowed } = useERC20TokenAllowance(dappConfig.beproContracAddress, address ? address: "", dappConfig.sablierContracAddress);
   return (
     <>
       <GridRow>
@@ -32,7 +30,7 @@ const ShowWalletDetails = ()=> {
         <GridCol>{owner} is the Owner</GridCol>
       </GridRow>
       <GridRow>
-        <GridCol>{blockNumber} Block</GridCol>
+        <GridCol>{allowed} to be spent</GridCol>
       </GridRow>
       <GridRow>
         <GridCol>

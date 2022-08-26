@@ -12,10 +12,10 @@ import useAsync from "./useAsync";
   const dappkitProvider: IDappkitReactProvider = useContext(DappkitProviderCtx);    
   
   const execute = async () => {
-     return dappkitProvider.getConnection().getAddress();   
+     return dappkitProvider.getAddress();   
   };
 
-  const { loading , error, result }= useAsync(execute);
+  const { loading , error, result } = useAsync(execute);
 
   return {loading, address: result, error};
 };
