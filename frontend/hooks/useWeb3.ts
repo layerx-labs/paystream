@@ -1,12 +1,12 @@
 import { useEffect, useState, useContext } from "react";
-import { WebConnectionCtx } from "../context";
+import { DappkitProviderCtx } from "../context";
 import { IDappkitReactProvider } from "../lib/IDappkitReactProvider";
 
 export const useWeb3 = () => {
-  const proxy: IDappkitReactProvider = useContext(WebConnectionCtx);
-  const [connected, setConnected] = useState(proxy.isConnected());
-  const address = proxy.getAddress();
-  const chainId = proxy.getChainId();
+  const dappkitProvider: IDappkitReactProvider = useContext(DappkitProviderCtx);
+  const [connected, setConnected] = useState(dappkitProvider.isConnected());
+  const address = dappkitProvider.getAddress();
+  const chainId = dappkitProvider.getChainId();
   const [error, setError] = useState("");
 
   const reactor = {
@@ -23,19 +23,19 @@ export const useWeb3 = () => {
   };
 
   useEffect(() => {
-    proxy.subscribe(reactor);
+    dappkitProvider.subscribe(reactor);
     return () => {
-      proxy.unsubscribe(reactor);
+      dappkitProvider.unsubscribe(reactor);
     };
   }, []);
 
   return {
     connected,
     connect: () => {
-      proxy.connect();
+      dappkitProvider.connect();
     },
     disconnect: () => {
-      proxy.disconnect();
+      dappkitProvider.disconnect();
     },
     error,
     chainId,

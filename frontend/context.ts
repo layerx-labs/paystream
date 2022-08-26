@@ -16,5 +16,5 @@ export const defaulProxy = new DappkitReactProvider(
     }
 )
 
-export const WebConnectionCtx = React.createContext(defaulProxy);
+export const DappkitProviderCtx = React.createContext(defaulProxy);
 

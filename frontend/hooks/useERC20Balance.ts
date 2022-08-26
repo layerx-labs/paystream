@@ -1,6 +1,6 @@
 import { ERC20 } from "@taikai/dappkit";
 import { useEffect, useState, useContext, useCallback } from "react";
-import { WebConnectionCtx } from "../context";
+import { DappkitProviderCtx } from "../context";
 
 const useERC20Balance = (contractAddress: string, address?: string): {
   loading: boolean,
@@ -11,7 +11,7 @@ const useERC20Balance = (contractAddress: string, address?: string): {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [balance, setBalance] = useState(0);  
-  const proxy = useContext(WebConnectionCtx);
+  const proxy = useContext(DappkitProviderCtx);
 
   const execute = useCallback(async ()=> { 
     if(!address) {
