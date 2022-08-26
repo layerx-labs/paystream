@@ -6,10 +6,11 @@ import useAsync from "./useAsync";
 const useERC20TokenAllowance = (contractAddress: string, owner: string, spender: string): {
   loading: boolean,
   error: string | null,
-  allowed: number
+  allowed: string
 } => {
     
     const proxy = useContext(DappkitProviderCtx);
+    // Execute Query when we have all the required arguments
     useEffect(()=>{
         if (contractAddress && owner && spender ) {
             execute();
@@ -23,8 +24,10 @@ const useERC20TokenAllowance = (contractAddress: string, owner: string, spender:
      }, [contractAddress, owner, spender]);
    
     const { loading , error, result, execute} = useAsync(executeFunc, false);
-   
-  return { loading, error, allowed: result? result: 0 };
+    const allowed = result? proxy.getConnection().utils.fromWei(
+        result.toLocaleString('fullwide', {useGrouping:false})
+    ): "" ;
+    return { loading, error, allowed };
 };
 
 
