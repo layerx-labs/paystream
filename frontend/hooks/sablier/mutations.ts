@@ -1,12 +1,10 @@
 import { useCallback, useContext, useState } from "react";
-import { ReceiptReactor, OnErrorReactor } from "../../interfaces";
 import { Sablier, SablierMethods } from "paystream-sdk";
 import { TransactionReceipt } from "@taikai/dappkit/dist/src/interfaces/web3-core";
 import { dappConfig } from "../../config";
 import { chainDict } from "../../constants/networks";
 import { ContractSendMethod } from "web3-eth-contract";
-import { WebConnectionCtx } from "../../context";
-var Tx = require('@ethereumjs/tx').Transaction;
+
 
 export type MutationArgs = {
   onTransactionHash?: (hash: string) => void;
@@ -54,7 +52,7 @@ export const useCallSablier = <Method extends string & keyof SablierMethods > (
         await contract.connect();
         await contract.start();      
         const from = await contract.connection.getAddress();
-        const methodToCall = contract.contract.methods[method];       
+        const methodToCall = contract.contract.methods[method];     
         const sendMethod: ContractSendMethod = methodToCall(
             ...mutateArgs
         );

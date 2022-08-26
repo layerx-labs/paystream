@@ -13,7 +13,7 @@ import useAddress from "../hooks/useAddress";
 import { useOwnerQuery } from "../hooks/sablier/queries";
 import useBlockNumber from "../hooks/useBlockNumber";
 
-
+import web3 from "web3";
 
 const ShowWalletDetails = ()=> {  
   const { chainId }  = useWeb3();
@@ -32,9 +32,9 @@ const ShowWalletDetails = ()=> {
     },
   });
   const { blockNumber } = useBlockNumber();
-  const blockStart = `${Math.floor(Date.now() / 1000)}` as any as number;
-  const amount = "10000000" as any as number;;
-  const blockEnd = `${blockStart+amount}` as any as number;
+  const blockStart = Math.floor(Date.now() / 1000)+3600;
+  const amount = 100;
+  const blockEnd = blockStart + amount;
 
   return (
     <>
@@ -64,13 +64,12 @@ const ShowWalletDetails = ()=> {
             variant="solid"
             action={() => {
               mutate(
-                "0x37ebdd9B2adC5f8af3993256859c1Ea3BFE1465e",
-                amount,
-                "0x5Ac32814f9EB4d415779892890a216b244FcB3B5",
-                blockStart,
-                blockEnd
-              );
-              //mutate(10)          
+                "0x508893f4E26412fe4Bbeb4895335882b655Bcf65",
+                web3.utils.toWei(amount.toString()) as any as number,
+                dappConfig.beproContracAddress,
+                blockStart ,
+                blockEnd 
+              );    
             }}
           />
         </GridCol>
