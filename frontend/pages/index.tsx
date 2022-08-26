@@ -5,7 +5,7 @@ import { GridContainer, GridCol, GridRow, Button } from "@taikai/rocket-kit";
 import useBalance from "../hooks/useETHBalance";
 import { useWeb3 } from "../hooks/useWeb3";
 import { dappConfig } from "../config";
-import useAddress from "../hooks/useAddress";
+import {useAddress} from "../hooks";
 import { useOwnerQuery } from "../hooks/sablier/queries";
 import useERC20TokenAllowance from "../hooks/useERC20TokenAllowance";
 import useERC20Balance from "../hooks/useERC20Balance";
